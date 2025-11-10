@@ -1,4 +1,3 @@
-
 import CardNav from "@/components/ui/CardNav";
 
 const Navbar = () => {
@@ -35,14 +34,15 @@ const Navbar = () => {
 
 return (
     <CardNav
-      logo= "/Logo/Pix.png"
+      logo= "/Logo/C.png"
       logoAlt="Company Logo"
       items={items}
-      baseColor="#fff"
-      menuColor="#000"
-      buttonBgColor="#111"
-      buttonTextColor="#fff"
+      baseColor="#1a1a1a"
+      menuColor="#e9ecef"
+      buttonBgColor="#e9ecef"
+      buttonTextColor="#1a1a1a"
       ease="power3.out"
+      className="font-urbanist"
     />
   );
 };

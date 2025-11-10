@@ -95,7 +95,6 @@ export default function DemoOne() {
         />
       </div>
 
-     
     </div>
   )
 }

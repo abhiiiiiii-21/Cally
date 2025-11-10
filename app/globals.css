@@ -128,3 +128,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+.font-raleway {
+  font-family: var(--font-raleway);
+}
+
+.font-urbanist {
+  font-family: var(--font-urbanist);
+}

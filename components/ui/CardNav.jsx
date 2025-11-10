@@ -3,6 +3,8 @@ import { useLayoutEffect, useRef, useState } from 'react';
 import { gsap } from 'gsap';
 // use your own icon import if react-icons is not available
 import { GoArrowUpRight } from 'react-icons/go';
+import { useRouter } from "next/navigation";
+
 
 const CardNav = ({
   logo,
@@ -133,6 +135,12 @@ const CardNav = ({
     if (el) cardsRef.current[i] = el;
   };
 
+  const router = useRouter();
+
+  function onClickGetStarted() {
+    router.push("/auth/log-in");
+  }
+
   return (
     <div
       className={`card-nav-container absolute left-1/2 -translate-x-1/2 w-[90%] max-w-[800px] z-[99] top-[1.2em] md:top-[2em] ${className}`}
@@ -163,14 +171,14 @@ const CardNav = ({
             />
           </div>
 
-          <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none">
-            <img src={logo} alt={logoAlt} className="logo h-[28px]" />
-            <p className='text-2xl text-black'>Cally</p>
+          <div className="logo-container flex items-center md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2 order-1 md:order-none -space-x-2">
+            <img src={logo} alt={logoAlt} className="logo h-[57px]" />
+            <p className='text-2xl text-[#e9ecef] font-semibold'>Cally</p>
           </div>
 
           <button
-            type="button"
-            className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 items-center h-full font-medium cursor-pointer transition-colors duration-300"
+            type="button" onClick={onClickGetStarted}
+            className="card-nav-cta-button hidden md:inline-flex border-0 rounded-[calc(0.75rem-0.2rem)] px-4 items-center h-full font-semibold cursor-pointer transition-colors duration-300"
             style={{ backgroundColor: buttonBgColor, color: buttonTextColor }}
           >
             Get Started
