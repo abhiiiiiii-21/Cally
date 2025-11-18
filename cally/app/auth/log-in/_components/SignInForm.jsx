@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import axios from "axios";
+import { apiClient } from "@/lib/api";
 
 // --- Glass Input Wrapper ---
 const GlassInputWrapper = ({ children }) => (
@@ -33,7 +33,7 @@ export default function SignInForm() {
     setError("");
 
     try {
-      const res = await axios.post("/api/auth/login", {
+      const res = await apiClient.post("/auth/log-in", {
         email,
         password,
       });
@@ -46,10 +46,10 @@ export default function SignInForm() {
       router.push("/dashboard");
 
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data.error || "Login failed.");
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
       } else {
-        setError("Network error. Try again.");
+        setError("Something went wrong. Try again.");
       }
     }
   };

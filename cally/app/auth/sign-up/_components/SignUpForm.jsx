@@ -1,6 +1,6 @@
 "use client";
 
-import axios from "axios";
+import { apiClient } from "@/lib/api";
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -23,7 +23,7 @@ export default function SignUpForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   
-  // ❗ Missing earlier
+
   const [error, setError] = useState("");
 
   const router = useRouter();
@@ -35,7 +35,7 @@ export default function SignUpForm() {
     setError("");
 
     try {
-      const res = await axios.post("/api/auth/sign-up", {
+      const res = await apiClient.post("/auth/sign-up", {
         username,
         email,
         password,
@@ -48,16 +48,16 @@ export default function SignUpForm() {
       router.push("/dashboard");
 
     } catch (err) {
-      if (err.response) {
-        setError(err.response.data.error || "Signup failed.");
+      if (err.response?.data?.message) {
+        setError(err.response.data.message);
       } else {
-        setError("Network error. Please try again.");
+        setError("Something went wrong. Please try again.");
       }
       console.error("Signup error:", err);
     }
   };
 
-  function onClickCreateAccount() {
+  function onClickAlreadyUser() {
     router.push("/auth/log-in");
   }
 
@@ -170,7 +170,7 @@ export default function SignUpForm() {
         <p className="text-center text-sm text-muted-foreground flex items-center justify-center gap-1">
           Already a Cally user?
           <button
-            onClick={onClickCreateAccount}
+            onClick={onClickAlreadyUser}
             className="text-gray-300 hover:underline transition-colors cursor-pointer"
           >
             Sign In
