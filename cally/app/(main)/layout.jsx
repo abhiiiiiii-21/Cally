@@ -1,11 +1,15 @@
-import React from 'react'
+import { AppSidebar } from "@/components/app-siderbar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-const layout = () => {
+
+export default function Layout({ children }) {
   return (
-    <div>
-      
-    </div>
+    <SidebarProvider>
+      <AppSidebar />
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
   )
 }
-
-export default layout
