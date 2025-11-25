@@ -15,6 +15,8 @@ import {
   PieChart,
   Send,
   Settings2,
+  SquareArrowOutUpRight,
+  SquareArrowOutUpRightIcon,
   SquareTerminal,
   UsersIcon,
 } from "lucide-react"
@@ -64,6 +66,11 @@ const data = {
       url: "/availability",
       icon: ClockIcon
     },
+    {
+      title: "Public Profile",
+      url: "/public-page",
+      icon: SquareArrowOutUpRight
+    }
   ]
 }
 
@@ -81,7 +88,7 @@ export function AppSidebar(props) {
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" onClick={onClickIcon}>
               <div className="flex items-center gap-3">
-                <div className="bg-sidebar-primary text-sidebar-primary-foreground flex aspect-square size-8 items-center justify-center rounded-lg">
+                <div className="bg-[#343a40] text-sidebar-primary-foreground flex aspect-square size-9 items-center justify-center rounded-lg">
                   <Image src="/Logo/C.png" width={300} height={300} alt="Logo" />
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">

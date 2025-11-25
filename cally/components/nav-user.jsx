@@ -7,6 +7,8 @@ import {
     CreditCard,
     LogOut,
     Sparkles,
+    SquareArrowOutUpRightIcon,
+    UserIcon,
 } from "lucide-react"
 
 import {
@@ -74,23 +76,12 @@ export function NavUser({ user }) {
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
-                                <Sparkles />
-                                Upgrade to Pro
-                            </DropdownMenuItem>
-                        </DropdownMenuGroup>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuGroup>
-                            <DropdownMenuItem>
-                                <BadgeCheck />
-                                Account
+                                <UserIcon />
+                                My Profile
                             </DropdownMenuItem>
                             <DropdownMenuItem>
-                                <CreditCard />
-                                Billing
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Bell />
-                                Notifications
+                                <SquareArrowOutUpRightIcon/>
+                                Public Profile
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
