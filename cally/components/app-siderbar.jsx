@@ -58,8 +58,21 @@ const data = {
     },
     {
       title: "Meetings",
-      url: "/meetings",
-      icon: UsersIcon
+      icon: UsersIcon,
+      items: [
+        {
+          title: "Upcoming",
+          url: "/meetings/upcoming",
+        },
+        {
+          title: "Past",
+          url: "/meetings/past",
+        },
+        {
+          title: "Canceled",
+          url: "/meetings/cancelled",
+        },
+      ],
     },
     {
       title: "Availability",
