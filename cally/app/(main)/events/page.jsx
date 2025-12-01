@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 import React from 'react'
-import EventCards from './_components/eventsCards'
+import EventCards from './_components/EventsCards'
 
 
 const page = () => {

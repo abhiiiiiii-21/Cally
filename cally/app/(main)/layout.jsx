@@ -9,6 +9,7 @@ import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHe
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast"
 
 export default function Layout({ children }) {
 
@@ -59,9 +60,9 @@ export default function Layout({ children }) {
                   <div className="grid gap-3">
                     <Label htmlFor="sheet-minutes">Duration</Label>
                     <div className="relative">
-                      <Input className="peer ps-9 pe-16" htmlFor="sheet-minutes" placeholder="15" type="number"/>
+                      <Input className="peer ps-9 pe-16" htmlFor="sheet-minutes" placeholder="15" type="number" />
                       <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground text-sm peer-disabled:opacity-50">
-                        <ClockIcon className="h-4 w-4"/>
+                        <ClockIcon className="h-4 w-4" />
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 end-0 flex items-center justify-center pe-3 text-muted-foreground text-sm peer-disabled:opacity-50">
                         minutes
@@ -83,7 +84,11 @@ export default function Layout({ children }) {
         </header>
 
         <main>
-          {children}
+          <ToastProvider position="bottom-center">
+            <AnchoredToastProvider>
+              {children}
+            </AnchoredToastProvider>
+          </ToastProvider>
         </main>
       </SidebarInset>
     </SidebarProvider>

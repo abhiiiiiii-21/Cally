@@ -55,10 +55,10 @@ export default function EventCards() {
                                 <div className="flex space-x-2">
                                     <Tooltip>
                                         <TooltipTrigger>
-                                            <Switch checked={isOn} onCheckedChange={(v) => setIsOn(v)} />
+                                            <Switch checked={item.showOnProfile} onCheckedChange={(v) =>!v } />
                                         </TooltipTrigger>
                                         <TooltipContent>
-                                            <p>{isOn ? "Hide from profile" : "Show on profile"}</p>
+                                            <p>{item.showOnProfile ? "Hide from profile" : "Show on profile"}</p>
                                         </TooltipContent>
                                     </Tooltip>
                                 </div>
