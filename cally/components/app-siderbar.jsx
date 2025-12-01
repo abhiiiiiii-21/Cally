@@ -56,23 +56,10 @@ const data = {
       url: "/events",
       icon: CalendarIcon
     },
-    {
+    { 
       title: "Meetings",
+      url: "/meetings/upcoming",
       icon: UsersIcon,
-      items: [
-        {
-          title: "Upcoming",
-          url: "/meetings/upcoming",
-        },
-        {
-          title: "Past",
-          url: "/meetings/past",
-        },
-        {
-          title: "Canceled",
-          url: "/meetings/cancelled",
-        },
-      ],
     },
     {
       title: "Availability",
