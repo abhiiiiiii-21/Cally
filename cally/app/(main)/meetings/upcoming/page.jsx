@@ -1,7 +1,7 @@
 import { TabsPanel } from '@/components/ui/tabs'
 import React from 'react'
 
-const UpcomingPage = () => {
+const page = () => {
   return (
     <TabsPanel value="upcoming">
       <p>Upcoming</p>
@@ -10,4 +10,4 @@ const UpcomingPage = () => {
   )
 }
 
-export default UpcomingPage
+export default page

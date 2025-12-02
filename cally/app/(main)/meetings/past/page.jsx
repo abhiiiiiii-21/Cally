@@ -1,7 +1,7 @@
 import { TabsPanel } from '@/components/ui/tabs'
 import React from 'react'
 
-const PastPage = () => {
+const page = () => {
   return (
     <TabsPanel value="past">
       Past Meetings Page
@@ -10,4 +10,4 @@ const PastPage = () => {
   )
 }
 
-export default PastPage
+export default page

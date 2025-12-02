@@ -26,7 +26,7 @@ const AvailabilityCard = () => {
 
     }
     return (
-        <div className='w-full max-w-7xl space-y-3 mt-8 items-start'>
+        <div className='w-full max-w-7xl space-y-3 items-start'>
             {item.map((avail) => (
                 <div key={avail.id} className='bg-background border border-border rounded-lg p-6 hover:bg-accent/10 transition-colors'>
                     <div className="flex justify-between">

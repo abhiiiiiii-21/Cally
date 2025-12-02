@@ -1,7 +1,7 @@
 import { TabsPanel } from '@/components/ui/tabs'
 import React from 'react'
 
-const CancelledPage = () => {
+const page = () => {
   return (
     <TabsPanel value="cancelled">
       Cancelled Meetings Page
@@ -10,4 +10,4 @@ const CancelledPage = () => {
   )
 }
 
-export default CancelledPage
+export default page

@@ -11,15 +11,17 @@ const MeetingsTabs = ({ children }) => {
     const currentPage = pathname.split("/")[2] || "upcoming";
 
     return (
-        <div>
-            <div className='justify-center items-center flex'>
-                <Tabs defaultValue="upcoming"  value={currentPage} onValueChange={(v) => router.push(`/meetings/${v}`)} className="w-full">
+        <div className='flex justify-center'>
+            <div>
+                <Tabs defaultValue="upcoming" value={currentPage} onValueChange={(v) => router.push(`/meetings/${v}`)} className="w-full">
                     <TabsList>
                         <TabsTab value="upcoming">Upcoming</TabsTab>
                         <TabsTab value="past">Past</TabsTab>
                         <TabsTab value="cancelled">Cancelled</TabsTab>
                     </TabsList>
+                {children}
                 </Tabs>
+
             </div>
         </div>
     )

@@ -31,9 +31,16 @@ import {
     SidebarMenuItem,
     useSidebar,
 } from "@/components/ui/sidebar"
+import { useRouter } from "next/navigation"
 
 export function NavUser({ user }) {
     const { isMobile } = useSidebar()
+
+    const router = useRouter();
+
+    const navigateToProfile = () => {
+        router.push('/settings/edit-profile');
+    }
 
     return (
         <SidebarMenu>
@@ -75,17 +82,17 @@ export function NavUser({ user }) {
                         </DropdownMenuLabel>
                         <DropdownMenuSeparator />
                         <DropdownMenuGroup>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem onClick={navigateToProfile} className="cursor-pointer">
                                 <UserIcon />
-                                My Profile
+                                Edit Profile
                             </DropdownMenuItem>
-                            <DropdownMenuItem>
+                            <DropdownMenuItem className="cursor-pointer">
                                 <SquareArrowOutUpRightIcon/>
-                                Public Profile
+                                View Public Profile
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem variant="destructive">
+                        <DropdownMenuItem variant="destructive" className="cursor-pointer">
                             <LogOut />
                             Log out
                         </DropdownMenuItem>

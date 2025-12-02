@@ -2,22 +2,10 @@
 
 import * as React from "react"
 import {
-  BookOpen,
-  Bot,
-  Calendar1Icon,
   CalendarIcon,
   ClockIcon,
-  Command,
-  Frame,
   LayoutGridIcon,
-  LifeBuoy,
-  Map,
-  PieChart,
-  Send,
-  Settings2,
   SquareArrowOutUpRight,
-  SquareArrowOutUpRightIcon,
-  SquareTerminal,
   UsersIcon,
 } from "lucide-react"
 
@@ -41,7 +29,7 @@ const data = {
   user: {
     name: "shadcn",
     email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
+    avatar: "/Profile/Avatar1.png",
   },
 
   navMain: [
@@ -93,7 +81,7 @@ export function AppSidebar(props) {
                 </div>
                 <div className="grid flex-1 text-left text-sm leading-tight">
                   <span className="truncate font-medium">Cally</span>
-                  <span className="truncate text-xs text-neutral-400">Scheduler</span>
+                  <span className="truncate text-xs text-neutral-400">Meeting Scheduler</span>
                 </div>
               </div>
             </SidebarMenuButton>

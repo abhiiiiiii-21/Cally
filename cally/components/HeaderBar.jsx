@@ -38,6 +38,10 @@ const HeaderBar = () => {
             return { title: "Availability", sheet: "availability" }
         }
 
+        if (path == "/settings/edit-profile") {
+            return { title: "Edit Profile", sheet: null }
+        }
+
         return { title: "", sheet: null }
     }
 

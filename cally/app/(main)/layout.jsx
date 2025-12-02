@@ -11,7 +11,6 @@ export default function Layout({ children }) {
       <AppSidebar />
       <SidebarInset>
         <HeaderBar/>
-
         <main>
           <ToastProvider position="bottom-center">
             <AnchoredToastProvider>
