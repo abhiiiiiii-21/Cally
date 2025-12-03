@@ -24,14 +24,9 @@ import {
 } from "@/components/ui/sidebar"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
+import { apiClient } from "@/lib/api";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/Profile/Avatar1.png",
-  },
-
   navMain: [
     {
       title: "Dashboard",
@@ -44,7 +39,7 @@ const data = {
       url: "/events",
       icon: CalendarIcon
     },
-    { 
+    {
       title: "Meetings",
       url: "/meetings/upcoming",
       icon: UsersIcon,
@@ -64,6 +59,24 @@ const data = {
 
 export function AppSidebar(props) {
   const router = useRouter();
+  const [user, setUser] = React.useState({
+    name: "User",
+    email: "user@example.com",
+    avatar: "/Profile/Avatar1.png",
+  });
+
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        // Assuming apiClient is imported or defined elsewhere
+        const res = await apiClient.get("/auth/me");
+        setUser(res.data.user);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+    fetchUser();
+  }, []);
 
   function onClickIcon() {
     router.push("/");
@@ -93,7 +106,7 @@ export function AppSidebar(props) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user} />
       </SidebarFooter>
     </Sidebar>
   )

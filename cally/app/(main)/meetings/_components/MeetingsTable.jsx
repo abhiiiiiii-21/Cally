@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useEffect } from "react";
 import {
   Table,
   TableHeader,
@@ -9,14 +9,32 @@ import {
   TableCell,
   TableBody,
 } from "@/components/ui/table";
-import meetings from "@/data/meetings";
+import { apiClient } from "@/lib/api";
 import Link from "next/link";
 
 export default function MeetingsTable({ status }) {
-  // Filter based on status
-  const filteredData = useMemo(() => {
-    return meetings.filter((m) => m.status === status);
+  const [meetings, setMeetings] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMeetings = async () => {
+      setLoading(true);
+      try {
+        const res = await apiClient.get(`/bookings?type=${status}`);
+        setMeetings(res.data);
+      } catch (error) {
+        console.error("Failed to fetch meetings:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMeetings();
   }, [status]);
+
+  if (loading) {
+    return <div className="text-center mt-8">Loading...</div>;
+  }
 
   return (
     <div className="rounded-md border overflow-hidden w-full mx-auto mt-8">
@@ -32,8 +50,8 @@ export default function MeetingsTable({ status }) {
         </TableHeader>
 
         <TableBody>
-          {filteredData.length ? (
-            filteredData.map((row) => (
+          {meetings.length ? (
+            meetings.map((row) => (
               <TableRow key={row.id}>
                 <TableCell>{row.name}</TableCell>
                 <TableCell>{row.email}</TableCell>

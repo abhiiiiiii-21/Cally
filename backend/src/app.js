@@ -5,6 +5,9 @@ import jwt from "jsonwebtoken";
 import cors from "cors";
 
 import eventsRouter from "./routes/events.js";
+import bookingsRouter from "./routes/bookings.js";
+
+import authenticateToken from "./middleware/auth.js";
 
 const app = express();
 const prisma = new PrismaClient();
@@ -13,6 +16,42 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/events", eventsRouter);
+app.use("/bookings", bookingsRouter);
+
+app.get("/auth/me", authenticateToken, async (req, res) => {
+    try {
+        console.log("GET /auth/me request received");
+        console.log("User from token:", req.user);
+        const user = await prisma.user.findUnique({
+            where: { id: req.user.id },
+            select: {
+                id: true,
+                username: true,
+                email: true,
+                imageUrl: true,
+                name: true
+            }
+        });
+
+        if (!user) {
+            console.log("User not found in DB");
+            return res.sendStatus(404);
+        }
+
+        console.log("User found:", user);
+
+        res.json({
+            user: {
+                name: user.name || user.username,
+                email: user.email,
+                avatar: user.imageUrl || "/Profile/Avatar1.png"
+            }
+        });
+    } catch (error) {
+        console.error("Auth Me Error:", error);
+        res.sendStatus(500);
+    }
+});
 
 app.post("/auth/sign-up", async (req, res) => {
     try {
