@@ -1,7 +1,7 @@
 import { Input } from '@/components/ui/input'
 import { ArrowRightIcon, SearchIcon } from 'lucide-react'
 import React from 'react'
-import EventsCards from './_components/EventsCards'
+import EventsCardList from './_components/EventsCardList'
 
 
 const page = () => {
@@ -27,7 +27,7 @@ const page = () => {
         </div>
       </div>
 
-      <EventsCards className="items-start"/>
+      <EventsCardList className="items-start" />
     </div>
   )
 }

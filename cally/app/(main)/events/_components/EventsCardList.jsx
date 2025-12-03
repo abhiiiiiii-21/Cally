@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Sortable, SortableItem, SortableItemHandle, } from "@/components/ui/sortable";
 import { ClockIcon, CopyIcon, ExternalLinkIcon, GripVertical, LinkIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
-import EventsCards from "@/data/EventCards";
+import initialEventCards from "@/data/EventCards";
 import { Switch } from "@/components/ui/switch";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -13,9 +13,9 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import NoEventsAvailable from "./NoEventsAvailable";
 import { toastManager } from "@/components/ui/toast";
 
-const defaultItems = EventsCards;
+const defaultItems = initialEventCards;
 
-export default function EventsCards() {
+export default function EventsCardList() {
 
     const [items, setItems] = useState(defaultItems);
     const getItemValue = (item) => item.id;
@@ -145,7 +145,7 @@ export default function EventsCards() {
 
                                                         <DropdownMenuGroup>
                                                             <DropdownMenuItem className="cursor-pointer" variant="destructive">
-                                                                <Trash2Icon className=""/>
+                                                                <Trash2Icon className="" />
                                                                 Delete
                                                             </DropdownMenuItem>
                                                         </DropdownMenuGroup>
