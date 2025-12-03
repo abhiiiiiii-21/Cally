@@ -14,10 +14,78 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  username  String  @unique
-  email     String  @unique
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(uuid())
+  clerkUserId  String   @unique
+  email        String   @unique
+  username     String?  @unique
+  name         String?
+  imageUrl     String?
+  events       Event[]  @relation("UserEvents")
+  bookings     Booking[] @relation("UserBookings")
+  availability Availability?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Event {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  duration    Int
+  userId      String
+  user        User     @relation("UserEvents", fields: [userId], references: [id])
+  bookings    Booking[]
+  isPrivate   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Booking {
+  id             String  @id @default(uuid())
+  eventId        String
+  event          Event   @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User    @relation("UserBookings", fields: [userId], references: [id])
+  name           String   // Name of the person booking the event
+  email          String   // Email of the person booking the event
+  additionalInfo String?  
+  startTime      DateTime
+  endTime        DateTime
+  meetLink       String  // Google Meet link
+  googleEventId  String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model Availability {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+
+  days        DayAvailability[]
+
+  timeGap     Int      // Minimum gap between bookings in minutes
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DayAvailability {
+  id             String @id @default(uuid())
+  availabilityId String
+  day            DayOfWeek
+  startTime      DateTime
+  endTime        DateTime
+  
+  availability Availability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
+}
+
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
 }
