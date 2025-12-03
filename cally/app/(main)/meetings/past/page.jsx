@@ -1,13 +1,10 @@
-import { TabsPanel } from '@/components/ui/tabs'
-import React from 'react'
+import { TabsPanel } from "@/components/ui/tabs";
+import MeetingsTable from "../_components/MeetingsTable";
 
-const page = () => {
+export default function Page() {
   return (
     <TabsPanel value="past">
-      Past Meetings Page
+      <MeetingsTable status="completed" />
     </TabsPanel>
-    
-  )
+  );
 }
-
-export default page

@@ -1,5 +1,5 @@
 "use client";
-import { CircleAlertIcon, Key, Trash2 } from "lucide-react";
+import { CircleAlertIcon, EyeIcon, EyeOffIcon, Key, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,13 +15,12 @@ import FullUserData from "@/data/FullUserData";
 
 export default function ProfileTabs() {
     const user = FullUserData[0];
-
-    const [name, setName] = useState(user.name);
-    const [username, setUsername] = useState(user.username);
-    const [email, setEmail] = useState(user.email);
-    const [about, setAbout] = useState(user.about || "");
-
     const [inputValue, setInputValue] = useState("");
+
+    const [userData, setUserData] = useState(user);
+    const [originalData, setOriginalData] = useState(user);
+
+    const isChanged = JSON.stringify(userData) !== JSON.stringify(originalData);
 
     function SaveToast() {
         toastManager.add({
@@ -29,6 +28,18 @@ export default function ProfileTabs() {
             type: "success",
         });
     }
+
+    function ChangePasswordToast() {
+        toastManager.add({
+            title: "Password updated successfully!",
+            type: "success",
+        });
+    }
+
+    const [isVisible, setIsVisible] = useState(false);
+
+    const toggleVisibility = () => setIsVisible((prevState) => !prevState);
+
 
     return (
         <Tabs defaultValue="personal" className="space-y-6">
@@ -51,8 +62,8 @@ export default function ProfileTabs() {
                                 <Label htmlFor="fullName">Full Name</Label>
                                 <Input
                                     id="fullName"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
+                                    value={userData.name}
+                                    onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                                 />
                             </div>
 
@@ -62,8 +73,8 @@ export default function ProfileTabs() {
                                     <Input
                                         className="peer ps-36"
                                         id="username"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={userData.username}
+                                        onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                                     />
                                     <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-muted-foreground text-sm">
                                         getcally.vercel.com/
@@ -76,8 +87,8 @@ export default function ProfileTabs() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    value={email}
-                                    onChange={(e) => setEmail(e.target.value)}
+                                    value={userData.email}
+                                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
                                 />
                             </div>
                         </div>
@@ -88,8 +99,8 @@ export default function ProfileTabs() {
                             <Textarea
                                 id="about"
                                 rows={4}
-                                value={about}
-                                onChange={(e) => setAbout(e.target.value)}
+                                value={userData.about}
+                                onChange={(e) => setUserData({ ...userData, about: e.target.value })}
                                 placeholder="Tell us about yourself..."
                             />
                         </div>
@@ -97,9 +108,17 @@ export default function ProfileTabs() {
                 </Card>
 
                 <div className="flex justify-end">
-                    <Button size="sm" className="cursor-pointer" onClick={SaveToast}>
+                    <Button
+                        size="sm"
+                        disabled={!isChanged}
+                        onClick={() => {
+                            setOriginalData(userData);
+                            SaveToast();
+                        }}
+                    >
                         Save Changes
                     </Button>
+
                 </div>
             </TabsContent>
 
@@ -225,10 +244,86 @@ export default function ProfileTabs() {
                                 <p className="text-muted-foreground text-sm">Last changed 3 months ago</p>
                             </div>
 
-                            <Button variant="outline" size="sm" className="cursor-pointer">
-                                <Key className="h-4 w-4" />
-                                Change Password
-                            </Button>
+
+
+                            <Dialog>
+                                <DialogTrigger asChild>
+                                    <Button variant="outline" size="sm" className="cursor-pointer">
+                                        <Key className="h-4 w-4" />
+                                        Change Password
+                                    </Button>
+                                </DialogTrigger>
+
+                                <DialogContent className="font-urbanist max-w-[18rem]">
+                                    <div className="flex flex-col items-center gap-2">
+                                        <div aria-hidden="true" className="flex size-11 shrink-0 items-center justify-center rounded-full border">
+                                            <Key className="h-4 w-4" />
+                                        </div>
+
+                                        <DialogHeader>
+                                            <DialogTitle className="sm:text-center">Change Password</DialogTitle>
+                                            <DialogDescription className="sm:text-center">
+                                                Enter your current and new password.
+                                            </DialogDescription>
+                                        </DialogHeader>
+                                    </div>
+
+                                    <form className="space-y-5">
+                                        <div className="space-y-4">
+                                            <div className="flex flex-col gap-2">
+                                                <Label htmlFor="currentPassword">Current Password</Label>
+                                                <div className="relative">
+
+                                                    <Input className="pe-9" id="currentPassword" placeholder="Enter current password"
+                                                        type={isVisible ? "text" : "password"}/>
+                                                    <button aria-controls="password"
+                                                        aria-label={isVisible ? "Hide password" : "Show password"}
+                                                        aria-pressed={isVisible}
+                                                        className="cursor-pointer absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                                                        onClick={toggleVisibility}
+                                                        type="button">
+                                                        {isVisible ? (
+                                                            <EyeOffIcon aria-hidden="true" size={16} />
+                                                        ) : (
+                                                            <EyeIcon aria-hidden="true" size={16} />
+                                                        )}
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <div className="flex flex-col gap-2">
+                                                <Label htmlFor="newPassword">New Password</Label>
+                                                <div className="relative">
+
+                                                    <Input className="pe-9" id="newPassword" placeholder="Enter new password"
+                                                        type={isVisible ? "text" : "password"}
+                                                    />
+                                                    <button aria-controls="password"
+                                                        aria-label={isVisible ? "Hide password" : "Show password"}
+                                                        aria-pressed={isVisible}
+                                                        className="cursor-pointer absolute inset-y-0 end-0 flex h-full w-9 items-center justify-center rounded-e-md text-muted-foreground/80 outline-none transition-[color,box-shadow] hover:text-foreground focus:z-10 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50"
+                                                        onClick={toggleVisibility}
+                                                        type="button"
+                                                    >
+                                                        {isVisible ? (
+                                                            <EyeOffIcon aria-hidden="true" size={16} />
+                                                        ) : (
+                                                            <EyeIcon aria-hidden="true" size={16} />
+                                                        )}
+                                                    </button>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <DialogFooter>
+                                            <Button className="cursor-pointer" type="submit" size="sm" onClick={ChangePasswordToast}>
+                                                Change Password
+                                            </Button>
+                                        </DialogFooter>
+                                    </form>
+                                </DialogContent>
+                            </Dialog>
                         </div>
                     </CardContent>
                 </Card>
