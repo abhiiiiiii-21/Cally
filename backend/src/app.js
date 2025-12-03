@@ -4,11 +4,15 @@ import express from "express";
 import jwt from "jsonwebtoken";
 import cors from "cors";
 
+import eventsRouter from "./routes/events.js";
+
 const app = express();
 const prisma = new PrismaClient();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/events", eventsRouter);
 
 app.post("/auth/sign-up", async (req, res) => {
     try {

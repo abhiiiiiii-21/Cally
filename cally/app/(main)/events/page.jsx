@@ -1,10 +1,22 @@
+"use client";
+
 import { Input } from '@/components/ui/input'
 import { ArrowRightIcon, SearchIcon } from 'lucide-react'
-import React from 'react'
+import React, { useState } from 'react'
 import EventsCardList from './_components/EventsCardList'
 
 
 const page = () => {
+  const [search, setSearch] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [search]);
+
   return (
     <div className='p-4 font-urbanist pl-11 pr-11'>
       <div className="max-w-56">
@@ -13,6 +25,8 @@ const page = () => {
             className="peer ps-9 pe-9"
             placeholder="Search..."
             type="search"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <div className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground/80 peer-disabled:opacity-50">
             <SearchIcon size={16} />
@@ -27,7 +41,7 @@ const page = () => {
         </div>
       </div>
 
-      <EventsCardList className="items-start" />
+      <EventsCardList className="items-start" searchParams={debouncedSearch} />
     </div>
   )
 }

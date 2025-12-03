@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api";
 import { Sortable, SortableItem, SortableItemHandle, } from "@/components/ui/sortable";
 import { ClockIcon, CopyIcon, ExternalLinkIcon, GripVertical, LinkIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
-import initialEventCards from "@/data/EventCards";
 import { Switch } from "@/components/ui/switch";
 import { ButtonGroup } from "@/components/ui/button-group";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -12,15 +12,91 @@ import { Badge } from "@/components/ui/badge";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import NoEventsAvailable from "./NoEventsAvailable";
 import { toastManager } from "@/components/ui/toast";
+import EventsSheet from "./EventsSheet";
 
-const defaultItems = initialEventCards;
+const defaultItems = "";
 
-export default function EventsCardList() {
+export default function EventsCardList({ searchParams }) {
 
-    const [items, setItems] = useState(defaultItems);
+    const [items, setItems] = useState([]);
+    const [loading, setLoading] = useState(true);
     const getItemValue = (item) => item.id;
     const [label, setLabel] = useState("personal");
     const [isOn, setIsOn] = useState(false);
+
+    // Edit Sheet State
+    const [isSheetOpen, setIsSheetOpen] = useState(false);
+    const [editingEvent, setEditingEvent] = useState(null);
+
+    const fetchEvents = async () => {
+        setLoading(true);
+        try {
+            const query = searchParams ? `?search=${encodeURIComponent(searchParams)}` : "";
+            const res = await apiClient.get(`/events${query}`);
+            setItems(res.data);
+        } catch (error) {
+            console.error("Failed to fetch events:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchEvents();
+    }, [searchParams]);
+
+    const handleToggleShowOnProfile = async (id, currentStatus) => {
+        try {
+            const newStatus = !currentStatus;
+            await apiClient.put(`/events/${id}`, {
+                showOnProfile: newStatus,
+            });
+
+            // Optimistic update
+            setItems((prev) => prev.map((item) =>
+                item.id === id ? { ...item, showOnProfile: newStatus } : item
+            ));
+
+            toastManager.add({
+                title: "Event updated successfully!",
+                type: "success",
+            });
+        } catch (error) {
+            console.error("Failed to update event:", error);
+            toastManager.add({
+                title: "Failed to update event.",
+                type: "error",
+            });
+        }
+    };
+
+    const handleDelete = async (id) => {
+        try {
+            await apiClient.delete(`/events/${id}`);
+            setItems((prev) => prev.filter((item) => item.id !== id));
+            toastManager.add({
+                title: "Event Deleted successfully",
+                type: "success",
+            });
+        } catch (error) {
+            console.error("Failed to delete event:", error);
+            toastManager.add({
+                title: "Failed to delete event.",
+                type: "error",
+            });
+        }
+    };
+
+    const handleEdit = (event) => {
+        setEditingEvent(event);
+        setIsSheetOpen(true);
+    };
+
+    const handleSheetSuccess = () => {
+        fetchEvents();
+        setIsSheetOpen(false);
+        setEditingEvent(null);
+    };
 
     const copyEventToast = () => {
         toastManager.add({
@@ -29,9 +105,13 @@ export default function EventsCardList() {
         });
     }
 
+    if (loading) {
+        return <div>Loading...</div>;
+    }
+
     return (
         <div className="w-full max-w-7xl space-y-8 mt-8 items-start">
-            {defaultItems.length === 0 ? <NoEventsAvailable /> :
+            {items.length === 0 ? <NoEventsAvailable /> :
                 <Sortable
                     value={items}
                     onValueChange={(newItems) => setItems(newItems)}
@@ -65,7 +145,10 @@ export default function EventsCardList() {
                                             <Tooltip>
                                                 <TooltipTrigger asChild>
                                                     <div>
-                                                        <Switch checked={item.showOnProfile} onCheckedChange={(v) => !v} />
+                                                        <Switch
+                                                            checked={item.showOnProfile}
+                                                            onCheckedChange={() => handleToggleShowOnProfile(item.id, item.showOnProfile)}
+                                                        />
                                                     </div>
                                                 </TooltipTrigger>
                                                 <TooltipContent className="bg-white text-black px-2 py-1 text-xs ">
@@ -131,7 +214,7 @@ export default function EventsCardList() {
                                                         className="w-52 font-urbanist bg-black"
                                                     >
                                                         <DropdownMenuGroup>
-                                                            <DropdownMenuItem className="cursor-pointer">
+                                                            <DropdownMenuItem className="cursor-pointer" onClick={() => handleEdit(item)}>
                                                                 <PencilIcon />
                                                                 Edit
                                                             </DropdownMenuItem>
@@ -144,7 +227,7 @@ export default function EventsCardList() {
                                                         <DropdownMenuSeparator />
 
                                                         <DropdownMenuGroup>
-                                                            <DropdownMenuItem className="cursor-pointer" variant="destructive">
+                                                            <DropdownMenuItem className="cursor-pointer" variant="destructive" onClick={() => handleDelete(item.id)}>
                                                                 <Trash2Icon className="" />
                                                                 Delete
                                                             </DropdownMenuItem>
@@ -162,6 +245,13 @@ export default function EventsCardList() {
                     ))}
                 </Sortable>
             }
+
+            <EventsSheet
+                isOpen={isSheetOpen}
+                onOpenChange={setIsSheetOpen}
+                initialData={editingEvent}
+                onSuccess={handleSheetSuccess}
+            />
         </div>
     );
 }
