@@ -15,7 +15,7 @@ import { toastManager } from "@/components/ui/toast";
 
 const defaultItems = EventsCards;
 
-export default function EventCards() {
+export default function EventsCards() {
 
     const [items, setItems] = useState(defaultItems);
     const getItemValue = (item) => item.id;
