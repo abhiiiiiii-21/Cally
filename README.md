@@ -1,6 +1,8 @@
 # Cally - Scheduling Made Simple
 
-Cally is a powerful and intuitive scheduling application designed to streamline meeting coordination. It allows users to create event types, share availability, and let others book meetings seamlessly.
+Cally is a powerful and intuitive scheduling application designed to streamline meeting coordination and scheduling. It allows users to create event types, share availability, and let others book meetings seamlessly.
+
+- **Proposal:** 
 
 ## 🚀 Hosted Application
 
