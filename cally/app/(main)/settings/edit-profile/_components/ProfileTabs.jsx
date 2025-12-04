@@ -10,23 +10,56 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { toastManager } from "@/components/ui/toast";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useState } from "react";
-import FullUserData from "@/data/FullUserData";
+import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { apiClient } from "@/lib/api";
 
 export default function ProfileTabs() {
-    const user = FullUserData[0];
     const [inputValue, setInputValue] = useState("");
+    const [loading, setLoading] = useState(true);
 
-    const [userData, setUserData] = useState(user);
-    const [originalData, setOriginalData] = useState(user);
+    const [userData, setUserData] = useState({
+        name: "",
+        username: "",
+        email: "",
+        about: ""
+    });
+    const [originalData, setOriginalData] = useState({});
+
+    useEffect(() => {
+        const fetchUser = async () => {
+            try {
+                const res = await apiClient.get("/auth/me");
+                const user = res.data.user;
+                setUserData(user);
+                setOriginalData(user);
+            } catch (error) {
+                console.error("Failed to fetch user:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchUser();
+    }, []);
 
     const isChanged = JSON.stringify(userData) !== JSON.stringify(originalData);
 
-    function SaveToast() {
-        toastManager.add({
-            title: "Profile updated successfully!",
-            type: "success",
-        });
+    async function handleSaveChanges() {
+        try {
+            const res = await apiClient.put("/auth/me", userData);
+            setUserData(res.data.user);
+            setOriginalData(res.data.user);
+            toastManager.add({
+                title: "Profile updated successfully!",
+                type: "success",
+            });
+        } catch (error) {
+            console.error("Failed to update profile:", error);
+            toastManager.add({
+                title: error.response?.data?.message || "Failed to update profile",
+                type: "error",
+            });
+        }
     }
 
     function ChangePasswordToast() {
@@ -36,10 +69,30 @@ export default function ProfileTabs() {
         });
     }
 
+    const router = useRouter();
+
+    async function handleDeleteAccount() {
+        try {
+            await apiClient.delete("/auth/me");
+            toastManager.add({
+                title: "Account deleted successfully",
+                type: "success",
+            });
+            router.push("/auth/log-in");
+        } catch (error) {
+            console.error("Failed to delete account:", error);
+            toastManager.add({
+                title: "Failed to delete account",
+                type: "error",
+            });
+        }
+    }
+
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleVisibility = () => setIsVisible((prevState) => !prevState);
 
+    if (loading) return <div>Loading...</div>;
 
     return (
         <Tabs defaultValue="personal" className="space-y-6">
@@ -62,7 +115,7 @@ export default function ProfileTabs() {
                                 <Label htmlFor="fullName">Full Name</Label>
                                 <Input
                                     id="fullName"
-                                    value={userData.name}
+                                    value={userData.name || ""}
                                     onChange={(e) => setUserData({ ...userData, name: e.target.value })}
                                 />
                             </div>
@@ -73,7 +126,7 @@ export default function ProfileTabs() {
                                     <Input
                                         className="peer ps-36"
                                         id="username"
-                                        value={userData.username}
+                                        value={userData.username || ""}
                                         onChange={(e) => setUserData({ ...userData, username: e.target.value })}
                                     />
                                     <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center ps-3 text-muted-foreground text-sm">
@@ -87,8 +140,9 @@ export default function ProfileTabs() {
                                 <Input
                                     id="email"
                                     type="email"
-                                    value={userData.email}
-                                    onChange={(e) => setUserData({ ...userData, email: e.target.value })}
+                                    value={userData.email || ""}
+                                    disabled
+                                    className="bg-muted"
                                 />
                             </div>
                         </div>
@@ -99,7 +153,7 @@ export default function ProfileTabs() {
                             <Textarea
                                 id="about"
                                 rows={4}
-                                value={userData.about}
+                                value={userData.about || ""}
                                 onChange={(e) => setUserData({ ...userData, about: e.target.value })}
                                 placeholder="Tell us about yourself..."
                             />
@@ -111,10 +165,7 @@ export default function ProfileTabs() {
                     <Button
                         size="sm"
                         disabled={!isChanged}
-                        onClick={() => {
-                            setOriginalData(userData);
-                            SaveToast();
-                        }}
+                        onClick={handleSaveChanges}
                     >
                         Save Changes
                     </Button>
@@ -202,7 +253,7 @@ export default function ProfileTabs() {
                                                 id="deleteUserInput"
                                                 value={inputValue}
                                                 onChange={(e) => setInputValue(e.target.value)}
-                                                placeholder={`Type ${user.username} to confirm`}
+                                                placeholder={`Type ${userData.username} to confirm`}
                                             />
                                         </div>
 
@@ -216,7 +267,8 @@ export default function ProfileTabs() {
                                             <Button
                                                 className="flex-1 cursor-pointer"
                                                 type="button"
-                                                disabled={inputValue.trim().toLowerCase() !== user.username.toLowerCase()}
+                                                disabled={inputValue.trim().toLowerCase() !== userData.username?.toLowerCase()}
+                                                onClick={handleDeleteAccount}
                                             >
                                                 Delete
                                             </Button>
@@ -275,7 +327,7 @@ export default function ProfileTabs() {
                                                 <div className="relative">
 
                                                     <Input className="pe-9" id="currentPassword" placeholder="Enter current password"
-                                                        type={isVisible ? "text" : "password"}/>
+                                                        type={isVisible ? "text" : "password"} />
                                                     <button aria-controls="password"
                                                         aria-label={isVisible ? "Hide password" : "Show password"}
                                                         aria-pressed={isVisible}

@@ -42,14 +42,73 @@ app.get("/auth/me", authenticateToken, async (req, res) => {
 
         res.json({
             user: {
-                name: user.name || user.username,
+                name: user.name,
                 email: user.email,
+                username: user.username,
+                about: user.about || "",
                 avatar: user.imageUrl || "/Profile/Avatar1.png"
             }
         });
     } catch (error) {
         console.error("Auth Me Error:", error);
         res.sendStatus(500);
+    }
+});
+
+app.put("/auth/me", authenticateToken, async (req, res) => {
+    try {
+        const { name, username, about } = req.body;
+
+        // Check if username is taken by another user
+        if (username) {
+            const existingUser = await prisma.user.findFirst({
+                where: {
+                    username: username,
+                    NOT: {
+                        id: req.user.id
+                    }
+                }
+            });
+
+            if (existingUser) {
+                return res.status(400).json({ message: "Username already taken" });
+            }
+        }
+
+        const updatedUser = await prisma.user.update({
+            where: { id: req.user.id },
+            data: {
+                name,
+                username,
+                about
+            }
+        });
+
+        res.json({
+            message: "Profile updated successfully",
+            user: {
+                name: updatedUser.name,
+                email: updatedUser.email,
+                username: updatedUser.username,
+                about: updatedUser.about,
+                avatar: updatedUser.imageUrl || "/Profile/Avatar1.png"
+            }
+        });
+    } catch (error) {
+        console.error("Update Profile Error:", error);
+        res.status(500).json({ message: "Internal server error" });
+    }
+});
+
+app.delete("/auth/me", authenticateToken, async (req, res) => {
+    try {
+        await prisma.user.delete({
+            where: { id: req.user.id }
+        });
+        res.json({ message: "Account deleted successfully" });
+    } catch (error) {
+        console.error("Delete Account Error:", error);
+        res.status(500).json({ message: "Internal server error" });
     }
 });
 
