@@ -1,6 +1,6 @@
 "use client";
 
-import { apiClient } from "@/lib/api";
+
 import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
@@ -22,7 +22,7 @@ export default function SignUpForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  
+
 
   const [error, setError] = useState("");
 
@@ -32,29 +32,7 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const res = await apiClient.post("/auth/sign-up", {
-        username,
-        email,
-        password,
-      });
-
-      const { token } = res.data;
-
-      localStorage.setItem("token", token);
-
-      router.push("/dashboard");
-
-    } catch (err) {
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Something went wrong. Please try again.");
-      }
-      console.error("Signup error:", err);
-    }
+    router.push("/dashboard");
   };
 
   function onClickAlreadyUser() {
@@ -157,10 +135,9 @@ export default function SignUpForm() {
             type="submit"
             disabled={!isFormValid}
             className={`cursor-pointer w-full rounded-xl py-2 font-medium shadow-md transition-colors
-              ${
-                isFormValid
-                  ? "bg-primary text-primary-foreground hover:bg-primary/90"
-                  : "bg-muted text-muted-foreground opacity-60 cursor-not-allowed"
+              ${isFormValid
+                ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                : "bg-muted text-muted-foreground opacity-60 cursor-not-allowed"
               }`}
           >
             Create Account

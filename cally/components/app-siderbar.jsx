@@ -24,7 +24,7 @@ import {
 } from "@/components/ui/sidebar"
 import Image from "next/image"
 import { useRouter } from "next/navigation";
-import { apiClient } from "@/lib/api";
+
 
 const data = {
   navMain: [
@@ -68,9 +68,13 @@ export function AppSidebar(props) {
   React.useEffect(() => {
     const fetchUser = async () => {
       try {
-        // Assuming apiClient is imported or defined elsewhere
-        const res = await apiClient.get("/auth/me");
-        setUser(res.data.user);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setUser({
+          name: "John Doe",
+          email: "john@example.com",
+          avatar: "https://github.com/shadcn.png",
+        });
       } catch (error) {
         console.error("Failed to fetch user:", error);
       }

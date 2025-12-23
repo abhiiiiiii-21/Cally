@@ -24,8 +24,26 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-import { apiClient } from "@/lib/api";
 import Link from "next/link";
+
+const MOCK_MEETINGS = [
+  {
+    id: "1",
+    name: "John Doe",
+    email: "john@example.com",
+    date: "2024-02-15",
+    slotBooked: "10:00 AM - 10:30 AM",
+    meetingUrl: "https://meet.google.com/abc-defg-hij",
+  },
+  {
+    id: "2",
+    name: "Jane Smith",
+    email: "jane@example.com",
+    date: "2024-02-16",
+    slotBooked: "2:00 PM - 3:00 PM",
+    meetingUrl: "https://meet.google.com/xyz-uvwx-yz",
+  },
+];
 
 export default function MeetingsTable({ status }) {
   const [meetings, setMeetings] = useState([]);
@@ -39,9 +57,10 @@ export default function MeetingsTable({ status }) {
     const fetchMeetings = async () => {
       setLoading(true);
       try {
-        const res = await apiClient.get(`/bookings?type=${status}&page=${page}&limit=${limit}&filter=${filter}`);
-        setMeetings(res.data.data);
-        setMeta(res.data.meta);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setMeetings(MOCK_MEETINGS);
+        setMeta({ total: MOCK_MEETINGS.length, page: 1, limit: 10, totalPages: 1 });
       } catch (error) {
         console.error("Failed to fetch meetings:", error);
       } finally {

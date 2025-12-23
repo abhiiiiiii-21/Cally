@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api";
+
 import { Sortable, SortableItem, SortableItemHandle, } from "@/components/ui/sortable";
 import { ClockIcon, CopyIcon, ExternalLinkIcon, GripVertical, LinkIcon, MoreHorizontalIcon, PencilIcon, Trash2Icon } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
@@ -15,6 +15,30 @@ import { toastManager } from "@/components/ui/toast";
 import EventsSheet from "./EventsSheet";
 
 const defaultItems = "";
+
+const MOCK_EVENTS = [
+    {
+        id: "1",
+        title: "30 Minute Meeting",
+        description: "A quick catch-up call.",
+        duration: 30,
+        showOnProfile: true,
+    },
+    {
+        id: "2",
+        title: "Project Consultation",
+        description: "In-depth review of project requirements.",
+        duration: 60,
+        showOnProfile: false,
+    },
+    {
+        id: "3",
+        title: "Quick Chat",
+        description: "Just a quick chat.",
+        duration: 15,
+        showOnProfile: true,
+    },
+];
 
 export default function EventsCardList({ searchParams }) {
 
@@ -31,9 +55,9 @@ export default function EventsCardList({ searchParams }) {
     const fetchEvents = async () => {
         setLoading(true);
         try {
-            const query = searchParams ? `?search=${encodeURIComponent(searchParams)}` : "";
-            const res = await apiClient.get(`/events${query}`);
-            setItems(res.data);
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            setItems(MOCK_EVENTS);
         } catch (error) {
             console.error("Failed to fetch events:", error);
         } finally {
@@ -48,9 +72,8 @@ export default function EventsCardList({ searchParams }) {
     const handleToggleShowOnProfile = async (id, currentStatus) => {
         try {
             const newStatus = !currentStatus;
-            await apiClient.put(`/events/${id}`, {
-                showOnProfile: newStatus,
-            });
+            // Mock API call
+            // await apiClient.put(`/events/${id}`, { showOnProfile: newStatus });
 
             // Optimistic update
             setItems((prev) => prev.map((item) =>
@@ -72,7 +95,8 @@ export default function EventsCardList({ searchParams }) {
 
     const handleDelete = async (id) => {
         try {
-            await apiClient.delete(`/events/${id}`);
+            // Mock API call
+            // await apiClient.delete(`/events/${id}`);
             setItems((prev) => prev.filter((item) => item.id !== id));
             toastManager.add({
                 title: "Event Deleted successfully",

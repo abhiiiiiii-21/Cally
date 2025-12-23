@@ -17,7 +17,13 @@ function formatJoined(dateString) {
 }
 
 import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api";
+
+
+const MOCK_USER = {
+  username: "johndoe",
+  email: "john@example.com",
+  avatar: "https://github.com/shadcn.png",
+};
 
 export default function ProfileHeader() {
   const [user, setUser] = useState(null);
@@ -34,9 +40,9 @@ export default function ProfileHeader() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await apiClient.get("/auth/me");
-        console.log("ProfileHeader fetched user:", res.data);
-        setUser(res.data.user);
+        // Simulate API delay
+        await new Promise(resolve => setTimeout(resolve, 500));
+        setUser(MOCK_USER);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       } finally {

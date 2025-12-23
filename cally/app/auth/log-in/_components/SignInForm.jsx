@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { apiClient } from "@/lib/api";
+
 
 // --- Glass Input Wrapper ---
 const GlassInputWrapper = ({ children }) => (
@@ -30,28 +30,7 @@ export default function SignInForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-
-    try {
-      const res = await apiClient.post("/auth/log-in", {
-        email,
-        password,
-      });
-
-      const { token } = res.data;
-
-      // store token
-      localStorage.setItem("token", token);
-
-      router.push("/dashboard");
-
-    } catch (err) {
-      if (err.response?.data?.message) {
-        setError(err.response.data.message);
-      } else {
-        setError("Something went wrong. Try again.");
-      }
-    }
+    router.push("/dashboard");
   };
 
   function onClickCreateAccount() {

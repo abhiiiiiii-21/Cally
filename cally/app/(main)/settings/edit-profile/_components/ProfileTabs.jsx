@@ -12,7 +12,14 @@ import { toastManager } from "@/components/ui/toast";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { apiClient } from "@/lib/api";
+
+
+const MOCK_USER = {
+    name: "John Doe",
+    username: "johndoe",
+    email: "john@example.com",
+    about: "I am a software engineer.",
+};
 
 export default function ProfileTabs() {
     const [inputValue, setInputValue] = useState("");
@@ -29,10 +36,10 @@ export default function ProfileTabs() {
     useEffect(() => {
         const fetchUser = async () => {
             try {
-                const res = await apiClient.get("/auth/me");
-                const user = res.data.user;
-                setUserData(user);
-                setOriginalData(user);
+                // Simulate API delay
+                await new Promise(resolve => setTimeout(resolve, 500));
+                setUserData(MOCK_USER);
+                setOriginalData(MOCK_USER);
             } catch (error) {
                 console.error("Failed to fetch user:", error);
             } finally {
@@ -46,9 +53,10 @@ export default function ProfileTabs() {
 
     async function handleSaveChanges() {
         try {
-            const res = await apiClient.put("/auth/me", userData);
-            setUserData(res.data.user);
-            setOriginalData(res.data.user);
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+            // Mock update
+            setOriginalData(userData);
             toastManager.add({
                 title: "Profile updated successfully!",
                 type: "success",
@@ -56,7 +64,7 @@ export default function ProfileTabs() {
         } catch (error) {
             console.error("Failed to update profile:", error);
             toastManager.add({
-                title: error.response?.data?.message || "Failed to update profile",
+                title: "Failed to update profile",
                 type: "error",
             });
         }
@@ -73,7 +81,8 @@ export default function ProfileTabs() {
 
     async function handleDeleteAccount() {
         try {
-            await apiClient.delete("/auth/me");
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
             toastManager.add({
                 title: "Account deleted successfully",
                 type: "success",

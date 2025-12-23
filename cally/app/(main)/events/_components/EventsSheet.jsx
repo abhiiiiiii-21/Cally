@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Textarea } from "@/components/ui/textarea"
-import { apiClient } from "@/lib/api"
+
 import { toastManager } from "@/components/ui/toast"
 import { ClockIcon, PlusCircleIcon } from "lucide-react"
 import { useState, useEffect } from "react"
@@ -41,23 +41,17 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
         setLoading(true);
 
         try {
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 500));
+
             if (initialData) {
-                await apiClient.put(`/events/${initialData.id}`, {
-                    title,
-                    description,
-                    duration,
-                });
+                // Mock update
                 toastManager.add({
                     title: "Event updated successfully!",
                     type: "success",
                 });
             } else {
-                await apiClient.post("/events", {
-                    title,
-                    description,
-                    duration,
-                    showOnProfile: true
-                });
+                // Mock create
                 toastManager.add({
                     title: "Event created successfully!",
                     type: "success",
@@ -68,7 +62,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
             if (onSuccess) {
                 onSuccess();
             } else {
-                window.location.reload();
+                // window.location.reload(); // Don't reload in mock mode
             }
         } catch (error) {
             console.error("Failed to save event:", error);
