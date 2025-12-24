@@ -32,7 +32,31 @@ export default function SignUpForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    router.push("/dashboard");
+    // setError("");
+
+
+    // console.log("Form submitted:", { username, email, password });
+    try {
+      const res = await fetch('http://localhost:5001/api/auth/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.error || 'Something went wrong');
+        return;
+      }
+
+      router.push('/dashboard');
+    } catch (error) {
+      console.error("Error during sign-up:", error);
+    }
+
   };
 
   function onClickAlreadyUser() {
@@ -61,7 +85,7 @@ export default function SignUpForm() {
           </p>
         </motion.div>
 
-        {/* ❗ Error Display */}
+
         {error && (
           <p className="text-red-400 text-center text-sm">{error}</p>
         )}

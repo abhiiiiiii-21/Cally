@@ -18,10 +18,9 @@ model User {
   username   String   @unique
   email      String   @unique
   password   String
-  fullname   String
+  fullname   String?
   profilePic String?
   about      String?
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 }
-
