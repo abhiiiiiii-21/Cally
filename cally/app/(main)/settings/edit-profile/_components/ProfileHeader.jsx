@@ -5,17 +5,6 @@ import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Mail } from "lucide-react";
 import { useFileUpload } from "@/hooks/use-file-upload";
 
-function formatJoined(dateString) {
-
-  const date = new Date(dateString);
-
-  return date.toLocaleString("en-US", {
-    month: "short",
-    year: "numeric",
-  });
-
-}
-
 import { useState, useEffect } from "react";
 
 
