@@ -87,14 +87,14 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
                     </SheetTrigger>
                 )}
 
-                <SheetContent className="font-urbanist">
+                <SheetContent className="font-urbanist flex flex-col">
                     <SheetHeader>
                         <SheetTitle>{initialData ? "Edit Event" : "Create New Event"}</SheetTitle>
                         <SheetDescription>
                             {initialData ? "Update your event details." : "Set up event types to offer different types of meetings."}
                         </SheetDescription>
                     </SheetHeader>
-                    <form onSubmit={handleSubmit} className="grid flex-1 auto-rows-min gap-6 px-4 mt-4">
+                    <form onSubmit={handleSubmit} className="flex flex-col flex-1 gap-6 px-4 mt-4">
                         <div className="grid gap-3">
                             <Label htmlFor="sheet-title">Title</Label>
                             <Input
@@ -137,7 +137,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
 
                         </div>
 
-                        <SheetFooter>
+                        <SheetFooter className="mt-auto w-full">
                             <Button type="submit" className="cursor-pointer" disabled={loading}>
                                 {loading ? "Saving..." : "Save changes"}
                             </Button>
