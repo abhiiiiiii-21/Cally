@@ -30,5 +30,21 @@ model Events {
   title         String   @unique
   description   String
   duration      DateTime
-  showOnProfile Boolean?  @default(true)
+  showOnProfile Boolean? @default(true)
+}
+
+model Meeting {
+  id            Int           @id @default(autoincrement())
+  status        MeetingStatus @default(UPCOMING)
+  attendeeName  String
+  attendeeEmail String
+  meetingDate   DateTime
+  slotTime      DateTime
+  meetingUrl    String
+}
+
+enum MeetingStatus {
+  UPCOMING
+  PAST
+  CANCELLED
 }
