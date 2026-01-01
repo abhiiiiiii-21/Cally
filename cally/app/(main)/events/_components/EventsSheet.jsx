@@ -10,6 +10,7 @@ import { ClockIcon, PlusCircleIcon } from "lucide-react"
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 
+
 const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -38,40 +39,25 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        setLoading(true);
 
         try {
-            // Simulate API delay
-            await new Promise(resolve => setTimeout(resolve, 500));
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`, {
+            method : 'POST',
+            headers : {"content-type" : "application/json"},
+            body : JSON.stringify({title, description, duration})
+            })
 
-            if (initialData) {
-                // Mock update
-                toastManager.add({
-                    title: "Event updated successfully!",
-                    type: "success",
-                });
-            } else {
-                // Mock create
-                toastManager.add({
-                    title: "Event created successfully!",
-                    type: "success",
-                });
+            const data = await res.json()
+
+            if (!res.ok) {
+                toastManager.error(data.error || 'Something went wrong');
+                return;
             }
 
+            toastManager.success('Event created successfully!');
             setOpen(false);
-            if (onSuccess) {
-                onSuccess();
-            } else {
-                // window.location.reload(); // Don't reload in mock mode
-            }
         } catch (error) {
-            console.error("Failed to save event:", error);
-            toastManager.add({
-                title: "Failed to save event.",
-                type: "error",
-            });
-        } finally {
-            setLoading(false);
+            console.log(error)
         }
     };
 
@@ -124,7 +110,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
                                     placeholder="15"
                                     type="number"
                                     value={duration}
-                                    onChange={(e) => setDuration(e.target.value)}
+                                    onChange={(e) => setDuration(Number(e.target.value))}
                                     required
                                 />
                                 <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground text-sm peer-disabled:opacity-50">
@@ -139,7 +125,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
 
                         <SheetFooter className="mt-auto w-full">
                             <Button type="submit" className="cursor-pointer" disabled={loading}>
-                                {loading ? "Saving..." : "Save changes"}
+                                {loading ? 'Saving...' : 'Save Changes'}
                             </Button>
                             <SheetClose asChild>
                                 <Button variant="outline" className="cursor-pointer">Close</Button>

@@ -14,33 +14,52 @@ datasource db {
 }
 
 model User {
-  id         Int      @id @default(autoincrement())
-  username   String   @unique
-  email      String   @unique
-  password   String
-  fullname   String?
-  profilePic String?
-  about      String?
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
+  id             Int            @id @default(autoincrement())
+  username       String         @unique
+  email          String         @unique
+  password       String
+  fullname       String?
+  profilePic     String?
+  about          String?
+  events         Event[]        @relation("UserEvents")
+  meetings       Meeting[]      @relation("UserMeetings")
+  availability   Availability[] @relation("UserAvailability")
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
 }
 
-model Events {
-  eventId       Int      @id @default(autoincrement())
-  title         String   @unique
+model Event {
+  id            Int       @id @default(autoincrement())
+  title         String
   description   String
-  duration      DateTime
-  showOnProfile Boolean? @default(true)
+  duration      Int
+  userId        String
+  user          User      @relation("UserEvents", fields: [userId], references: [id])
+  meetings      Meeting[]
+  showOnProfile Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 }
 
 model Meeting {
-  id            Int           @id @default(autoincrement())
-  status        MeetingStatus @default(UPCOMING)
-  attendeeName  String
-  attendeeEmail String
-  meetingDate   DateTime
-  slotTime      DateTime
-  meetingUrl    String
+  id Int @id @default(autoincrement())
+
+  eventId String
+  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  userId  String
+  user    User   @relation("UserEvents", fields: [userId], references: [id])
+
+  status         MeetingStatus @default(UPCOMING)
+  attendeeName   String
+  attendeeEmail  String
+  additionalInfo String?
+  meetingDate    DateTime 
+  startTime      DateTime
+  endTime        DateTime
+  meetingUrl     String
+  googleEventId  String
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 }
 
 enum MeetingStatus {
@@ -48,3 +67,29 @@ enum MeetingStatus {
   PAST
   CANCELLED
 }
+
+model Availability {
+  id     Int    @id @default(autoincrement())
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+  title     String
+  default   Boolean
+  days  DaysAvailability[]
+  timeGap Int
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model DaysAvailability{
+  id     Int    @id @default(autoincrement())
+  availabilityId String
+
+  
+  startTime DateTime
+  endTime   DateTime
+  availability Availability  @relation(fields: [userId], references: [id])
+}
+
+
+
+

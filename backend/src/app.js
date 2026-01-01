@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const app = express();
 const authRoutes = require('./routes/auth.route');
+const eventRoutes = require('./routes/event.route')
 
 app.use(
     cors({
@@ -19,6 +20,7 @@ app.get("/test", (req, res) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/events", eventRoutes);
 
 
 
