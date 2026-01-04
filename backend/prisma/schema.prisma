@@ -14,52 +14,59 @@ datasource db {
 }
 
 model User {
-  id             Int            @id @default(autoincrement())
-  username       String         @unique
-  email          String         @unique
-  password       String
-  fullname       String?
-  profilePic     String?
-  about          String?
+  id         Int     @id @default(autoincrement())
+  username   String  @unique
+  email      String  @unique
+  password   String
+  fullname   String?
+  profilePic String?
+  about      String?
+
   events         Event[]        @relation("UserEvents")
   meetings       Meeting[]      @relation("UserMeetings")
-  availability   Availability[] @relation("UserAvailability")
-  createdAt      DateTime       @default(now())
-  updatedAt      DateTime       @updatedAt
+  availabilities Availability[] @relation("UserAvailability")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Event {
-  id            Int       @id @default(autoincrement())
-  title         String
-  description   String
-  duration      Int
-  userId        String
-  user          User      @relation("UserEvents", fields: [userId], references: [id])
-  meetings      Meeting[]
-  showOnProfile Boolean   @default(true)
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id          Int    @id @default(autoincrement())
+  title       String
+  description String
+  duration    Int
+
+  userId Int
+  user   User @relation("UserEvents", fields: [userId], references: [id], onDelete: Cascade)
+
+  meetings Meeting[]
+
+  showOnProfile Boolean  @default(true)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 }
 
 model Meeting {
   id Int @id @default(autoincrement())
 
-  eventId String
-  event   Event  @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  userId  String
-  user    User   @relation("UserEvents", fields: [userId], references: [id])
+  eventId Int
+  event   Event @relation(fields: [eventId], references: [id], onDelete: Cascade)
+
+  userId Int
+  user   User @relation("UserMeetings", fields: [userId], references: [id], onDelete: Cascade)
 
   status         MeetingStatus @default(UPCOMING)
   attendeeName   String
   attendeeEmail  String
   additionalInfo String?
-  meetingDate    DateTime 
+  meetingDate    DateTime
   startTime      DateTime
   endTime        DateTime
   meetingUrl     String
   googleEventId  String
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 enum MeetingStatus {
@@ -69,27 +76,36 @@ enum MeetingStatus {
 }
 
 model Availability {
-  id     Int    @id @default(autoincrement())
-  userId String
-  user   User   @relation(fields: [userId], references: [id])
-  title     String
-  default   Boolean
-  days  DaysAvailability[]
+  id     Int  @id @default(autoincrement())
+  userId Int
+  user   User @relation("UserAvailability", fields: [userId], references: [id], onDelete: Cascade)
+
+  title   String
+  isdefault Boolean @default(false)
   timeGap Int
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+
+  days DaysAvailability[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model DaysAvailability{
-  id     Int    @id @default(autoincrement())
-  availabilityId String
+model DaysAvailability {
+  id             Int @id @default(autoincrement())
+  availabilityId Int
 
-  
-  startTime DateTime
-  endTime   DateTime
-  availability Availability  @relation(fields: [userId], references: [id])
+  day          DayOfWeek
+  startTime    String
+  endTime      String
+  availability Availability @relation(fields: [availabilityId], references: [id], onDelete: Cascade)
 }
 
-
-
-
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
