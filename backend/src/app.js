@@ -3,6 +3,7 @@ const cors = require('cors');
 const app = express();
 const authRoutes = require('./routes/auth.route');
 const eventRoutes = require('./routes/event.route')
+const testRoutes = require('./routes/test.route')
 
 app.use(
     cors({
@@ -14,13 +15,9 @@ app.use(
 app.use(express.json());
 
 
-app.get("/test", (req, res) => {
-  console.log("TEST ROUTE HIT");
-  res.json({ ok: true });
-});
-
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
+app.use("/api/test", testRoutes);
 
 
 

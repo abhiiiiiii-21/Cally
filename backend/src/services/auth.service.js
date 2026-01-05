@@ -1,8 +1,6 @@
 const prisma = require("../config/prisma");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken")
-const dotenv = require("dotenv");
-dotenv.config();
 
 const signup = async (data) => {
     const { username, email, password } = data;
@@ -21,6 +19,7 @@ const signup = async (data) => {
         throw new Error("User already exists");
     }
 
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await prisma.user.create({
@@ -31,19 +30,29 @@ const signup = async (data) => {
         },
     });
 
-    return user;
+    const token = jwt.sign({ "userId": user.id }, process.env.JWT_SECRET, { "expiresIn": "30d" })
+
+    return {
+        message: "Signup successful",
+        token,
+        user: {
+            id: user.id,
+            username: user.username,
+            email: user.email,
+        }
+    }
 };
 
 const login = async (data) => {
-    const { username, password } = data
+    const { email, password } = data
 
-    if (!username || !password) {
+    if (!email || !password) {
         throw new Error("Some fields are missing");
     }
 
     const user = await prisma.user.findUnique({
         where: {
-            username
+            email
         }
     })
 
@@ -57,7 +66,7 @@ const login = async (data) => {
         throw new Error("Incorrect Password")
     }
 
-    const token = jwt.sign({ "userN": user.username }, process.env.JWT_SECRET, { "expiresIn": "30d" })
+    const token = jwt.sign({ "userId": user.id }, process.env.JWT_SECRET, { "expiresIn": "30d" })
 
     return {
         message: "Login successful",
@@ -66,7 +75,7 @@ const login = async (data) => {
             id: user.id,
             username: user.username,
             email: user.email,
-        },
+        }
     };
 }
 

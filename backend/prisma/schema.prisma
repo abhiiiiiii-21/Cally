@@ -80,9 +80,9 @@ model Availability {
   userId Int
   user   User @relation("UserAvailability", fields: [userId], references: [id], onDelete: Cascade)
 
-  title   String
+  title     String
   isdefault Boolean @default(false)
-  timeGap Int
+  timeGap   Int
 
   days DaysAvailability[]
 
