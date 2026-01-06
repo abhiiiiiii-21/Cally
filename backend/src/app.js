@@ -4,6 +4,7 @@ const app = express();
 const authRoutes = require('./routes/auth.route');
 const eventRoutes = require('./routes/event.route')
 const testRoutes = require('./routes/test.route')
+const userRoutes = require('./routes/user.route')
 
 app.use(
     cors({
@@ -18,6 +19,7 @@ app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/test", testRoutes);
+app.use("/api/user", userRoutes)
 
 
 

@@ -1,12 +1,56 @@
-const {getMe} = require('../services/user.service');
+const { getUser, updateUser, deleteUser, changeUserPassword } = require('../services/user.service');
 
-const getMeController = async (req,res) => {
+const getUserController = async (req, res) => {
     try {
-        const user = await getMe(req.user.id)
+        // userId : id is taken from the jwt
+        const user = await getUser(req.user.userId)
         return res.status(200).json(user)
     } catch (error) {
-        
+        return res.status(400).json({ "message": error.message })
     }
 }
 
-module.exports = {getMeController}
+const updateUserController = async (req, res) => {
+    try {
+        const user = await updateUser(req.user.userId, req.body)
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(400).json({ "message": error.message })
+    }
+}
+
+const deleteUserController = async (req, res) => {
+    try {
+        const user = await deleteUser(req.user.userId)
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(400).json({ "message": error.message })
+    }
+}
+
+const passwordUserController = async (req, res) => {
+    try {
+        const { oldPassword, newPassword } = req.body
+
+        if (!oldPassword || !newPassword) {
+            return res.status(400).json({ "message": "Current password and New password are required!" })
+        }
+        const user = await changeUserPassword(req.user.userId, oldPassword, newPassword)
+        return res.status(200).json(user)
+    } catch (error) {
+        return res.status(400).json({ "message": error.message })
+    }
+}
+
+// const logoutUserController = async (req,res) => {
+//     try {
+//         const user = await logoutUser(req.user.userId)
+//         return res.status(200).json(user)
+//     } catch (error) {
+//         return res.status(400).json({"message" : error.message})
+//     }
+// }
+
+
+
+module.exports = { getUserController, updateUserController, deleteUserController, passwordUserController }
