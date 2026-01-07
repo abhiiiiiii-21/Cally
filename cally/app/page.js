@@ -5,7 +5,9 @@ import Testimonials from './_components/Testimonials'
 import Intergrations from './_components/Intergrations'
 import FAQs from './_components/FAQs'
 import Footer from './_components/Footer'
-// import HowItWorks from './_components/HowItWorks'
+import CTA from './_components/CTA'
+import WorkedWith from './_components/WorkedWith'
+import HowItWorks from './_components/HowItWorks'
 
 
 const page = () => {
@@ -13,10 +15,12 @@ const page = () => {
     <div>
       <Navbar/>
       <Hero/>
-      {/* <HowItWorks/> */}
+      <WorkedWith/>
+      <HowItWorks/>
       <Intergrations/>
       <Testimonials/>
       <FAQs/>
+      <CTA/>
       <Footer/>
     </div>
   )

@@ -5,13 +5,10 @@ import { ProgressiveBlur } from '@/components/ui/progressive-blur'
 
 export default function LogoCloud() {
     return (
-        <section className="bg-background overflow-hidden py-16">
+        <section className="bg-background overflow-hidden py-8">
             <div className="group relative m-auto max-w-7xl px-6">
-                <div className="flex flex-col items-center md:flex-row">
-                    <div className="md:max-w-44 md:border-r md:pr-6">
-                        <p className="text-end text-sm font-urbanist">Trusted by teams who value their time</p>
-                    </div>
-                    <div className="relative py-6 md:w-[calc(100%-11rem)]">
+                <div className="flex justify-center">
+                    <div className="relative py-6 w-full max-w-6xl">
                         <InfiniteSlider
                             speedOnHover={20}
                             speed={40}

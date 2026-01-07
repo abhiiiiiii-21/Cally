@@ -1,5 +1,6 @@
 "use client";
 import { TestimonialsColumn } from "@/components/blocks/testimonials-columns-1";
+import AnimatedBadge from "@/components/ui/animated-badge";
 import { motion } from "motion/react";
 
 const testimonials = [
@@ -78,7 +79,11 @@ const Testimonials = () => {
                     className="flex flex-col items-center justify-center max-w-[540px] mx-auto"
                 >
                     <div className="flex justify-center">
-                        <div className="border py-1 px-4 rounded-lg">Testimonials</div>
+                        <AnimatedBadge
+                            text="Testimonials"
+                            color="#22d3ee"
+                            href="/docs/components/animated-badge"
+                        />
                     </div>
 
                     <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold tracking-tighter mt-5">
@@ -99,4 +104,4 @@ const Testimonials = () => {
     );
 };
 
-export default Testimonials ;
+export default Testimonials;

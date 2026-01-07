@@ -1,10 +1,17 @@
-import IntegrationsSection from '@/components/integrations-5'
+
 import React from 'react'
+import IntegrationsSection from '@/components/integrations-5'
+import AnimatedBadge from '@/components/ui/animated-badge'
 
 const Intergrations = () => {
   return (
-    <section>
-        <IntegrationsSection/>
+    <section className='flex flex-col items-center mt-20 font-urbanist justify-center'>
+      <AnimatedBadge
+        text="Integrations"
+        color="#22d3ee"
+        href="/docs/components/animated-badge"
+      />
+      <IntegrationsSection />
     </section>
   )
 }

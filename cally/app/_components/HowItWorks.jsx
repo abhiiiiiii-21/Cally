@@ -1,20 +1,15 @@
-"use client"
-import LogoCloud from './_HowItWorks/LogoCloud'
-import { Status, StatusIndicator, StatusLabel } from '@/components/kibo-ui/status'
+import AnimatedBadge from "@/components/ui/animated-badge"
 
 const HowItWorks = () => {
   return (
-    <section className='flex flex-col items-center'>
-      <LogoCloud />
-      <Status status="online" variant="outline">
-        <StatusIndicator />
-        <StatusLabel className="font-urbanist">How it works</StatusLabel>
-      </Status>
+    <section className='flex flex-col items-center font-urbanist'>
+      <AnimatedBadge
+        text="How it works"
+        color="#22d3ee"
+        href=""
+      />
 
-      <div>
-
-      </div>
-
+      
     </section>
   )
 }
