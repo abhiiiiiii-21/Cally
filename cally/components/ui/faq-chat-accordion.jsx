@@ -2,13 +2,12 @@
 import * as React from "react";
 import { motion } from "framer-motion";
 import * as Accordion from "@radix-ui/react-accordion";
-import { Minus, Plus } from "lucide-react";
+import { CircleQuestionMarkIcon, Minus, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function FaqAccordion({
   data,
   className,
-  timestamp = "Every day, 9:01 AM",
   questionClassName,
   answerClassName
 }) {
@@ -16,9 +15,6 @@ export function FaqAccordion({
 
   return (
     <div className={cn("p-4", className)}>
-      {timestamp && (
-        <div className="mb-4 text-sm text-muted-foreground">{timestamp}</div>
-      )}
       <Accordion.Root
         type="single"
         collapsible
@@ -30,32 +26,35 @@ export function FaqAccordion({
               <Accordion.Trigger className="flex w-full items-center justify-start gap-x-4">
                 <div
                   className={cn(
-                    "relative flex items-center space-x-2 rounded-xl p-2 transition-colors",
-                    openItem === item.id.toString() 
-                      ? "bg-primary/20 text-primary" 
-                      : "bg-muted hover:bg-primary/10",
+                    "relative flex items-center space-x-2 rounded-xl p-2 transition-colors cursor-pointer",
+                    openItem === item.id.toString()
+                      ? "bg-neutral-900 text-primary"
+                      : "bg-neutral-900 hover:bg-primary/10",
                     questionClassName
                   )}>
                   {item.icon && (
                     <span
                       className={cn("absolute bottom-6", item.iconPosition === "right" ? "right-0" : "left-0")}
                       style={{
-                        transform: item.iconPosition === "right" 
-                          ? "rotate(7deg)" 
+                        transform: item.iconPosition === "right"
+                          ? "rotate(7deg)"
                           : "rotate(-4deg)",
                       }}>
                       {item.icon}
                     </span>
                   )}
-                  <span className="font-medium">{item.question}</span>
+                  <span className="font-medium flex items-center gap-1.5">
+                    <CircleQuestionMarkIcon className="h-4 w-4" />
+                    {item.question}
+                  </span>
                 </div>
 
                 <span
                   className={cn("text-muted-foreground", openItem === item.id.toString() && "text-primary")}>
                   {openItem === item.id.toString() ? (
-                    <Minus className="h-5 w-5" />
+                    <Minus className="h-5 w-5 cursor-pointer" />
                   ) : (
-                    <Plus className="h-5 w-5" />
+                    <Plus className="h-5 w-5 cursor-pointer" />
                   )}
                 </span>
               </Accordion.Trigger>

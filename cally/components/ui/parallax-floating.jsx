@@ -16,7 +16,9 @@ const Floating = ({
 }) => {
   const containerRef = useRef(null)
   const elementsMap = useRef(new Map())
-  const mousePositionRef = useMousePositionRef(containerRef)
+  const mousePositionRef = useMousePositionRef(containerRef, {
+    restrictToElement: true,
+  })
 
   const registerElement = useCallback((id, element, depth) => {
     elementsMap.current.set(id, {

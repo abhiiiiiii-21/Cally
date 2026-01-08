@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 
 export const useMousePositionRef = (
-  containerRef
+  containerRef,
+  options = {}
 ) => {
   const positionRef = useRef({ x: 0, y: 0 });
 
@@ -9,6 +10,19 @@ export const useMousePositionRef = (
     const updatePosition = (x, y) => {
       if (containerRef && containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
+
+        // If restrictToElement is true, check if the cursor is within the element's bounds
+        if (options.restrictToElement) {
+          if (
+            x < rect.left ||
+            x > rect.right ||
+            y < rect.top ||
+            y > rect.bottom
+          ) {
+            return; // Do not update position if outside
+          }
+        }
+
         const relativeX = x - rect.left;
         const relativeY = y - rect.top;
 
@@ -36,7 +50,7 @@ export const useMousePositionRef = (
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("touchmove", handleTouchMove);
     };
-  }, [containerRef]);
+  }, [containerRef, options.restrictToElement]);
 
   return positionRef;
 };

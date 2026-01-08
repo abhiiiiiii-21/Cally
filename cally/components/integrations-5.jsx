@@ -10,7 +10,7 @@ export default function IntegrationsSection() {
 
                     {/* LEFT  */}
                     <div className="space-y-3 flex flex-col text-center">
-                        <h1 className="text-balance text-4xl font-semibold md:text-5xl">
+                        <h1 className="text-balance text-5xl tracking-tight font-semibold">
                             Integrate with your favorite tools
                         </h1>
                         <p className="max-w-md text-neutral-600">
