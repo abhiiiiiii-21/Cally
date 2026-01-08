@@ -5,7 +5,7 @@ import AnimatedBadge from '@/components/ui/animated-badge'
 
 const Intergrations = () => {
   return (
-    <section className='flex flex-col items-center mt-20 font-urbanist justify-center'>
+    <section className='flex flex-col items-center mt-30 font-urbanist justify-center'>
       <AnimatedBadge
         text="Integrations"
         color="#22d3ee"

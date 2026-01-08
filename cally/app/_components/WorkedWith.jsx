@@ -11,7 +11,7 @@ const WorkedWith = () => {
                 color="#22d3ee"
                 href="/docs/components/animated-badge"
             />
-            <div className="text-center max-w-7xl mx-auto relative text-neutral-100 mt-9">
+            <div className="text-center max-w-7xl mx-auto relative text-neutral-100 mt-15">
                 <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight">
                     Effortless scheduling <br className="sm:hidden" />
                     <TooltipProvider>
@@ -44,7 +44,7 @@ const WorkedWith = () => {
                     trusted by
                 </h1>
 
-                <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold  leading-tight">
+                <h1 className="text-2xl md:text-3xl lg:text-4xl font-semibold leading-tight">
                     fast-moving teams
                     <TooltipProvider>
                         <Tooltip>

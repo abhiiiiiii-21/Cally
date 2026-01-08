@@ -1,10 +1,9 @@
 import AnimatedBadge from '@/components/ui/animated-badge'
-import ScrollFAQAccordion from '@/components/ui/scroll-faqaccordion'
 import React from 'react'
 
 const FAQs = () => {
   return (
-    <section className=''>
+    <section className='mt-30'>
       <div className='flex flex-col font-urbanist justify-center items-center'>
         <AnimatedBadge
           text="FAQs"
@@ -12,7 +11,7 @@ const FAQs = () => {
           href="/docs/components/animated-badge"
         />
       </div>
-      <ScrollFAQAccordion />
+
     </section>
   )
 }
