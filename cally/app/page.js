@@ -3,7 +3,7 @@ import React from 'react'
 import Hero from './_components/Hero'
 import Navbar from './_components/Navbar'
 import Testimonials from './_components/Testimonials'
-import Intergrations from './_components/Intergrations'
+import Integrations from './_components/Integrations'
 import CTA from './_components/CTA'
 import WorkedWith from './_components/WorkedWith'
 import HowItWorks from './_components/HowItWorks'
@@ -27,10 +27,10 @@ const page = () => {
         <Hero />
         <WorkedWith />
         <HowItWorks />
-        <Intergrations />
-        <Testimonials />
+        <Integrations />
+        {/* <Testimonials /> */}
         <FAQs />
-        <CTA />
+        {/* <CTA /> */}
 
     </main>
   )

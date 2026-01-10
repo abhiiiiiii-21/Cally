@@ -1,187 +1,142 @@
-import React from 'react';
-import { cn } from '@/lib/utils';
-import { motion, useReducedMotion } from 'motion/react';
+import React from "react"
+import { cn } from "@/lib/utils"
+import { motion, useReducedMotion } from "motion/react"
 import {
-	FacebookIcon,
-	FrameIcon,
-	InstagramIcon,
-	LinkedinIcon,
-	YoutubeIcon,
-} from 'lucide-react';
-import { Button } from '@/components/ui/button';
+    InstagramIcon,
+    LinkedinIcon,
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Component } from "@/components/ui/etheral-shadow"
+import Image from "next/image"
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button"
+import Link from "next/link"
 
-export function Footer({
-    className,
-    ...props
-}) {
-	return (
-        <footer
-            className={cn('relative h-[720px] w-full', className)}
-            style={{ clipPath: 'polygon(0% 0, 100% 0%, 100% 100%, 0 100%)' }}
-            {...props}>
-            <div className="fixed bottom-0 h-[720px] w-full">
-				<div className="sticky top-[calc(100vh-720px)] h-full overflow-y-auto">
-					<div
-                        className="relative flex size-full flex-col justify-between gap-5 border-t px-4 py-8 md:px-12">
-						<div aria-hidden className="absolute inset-0 isolate z-0 contain-strict">
-							<div
-                                className="bg-[radial-gradient(68.54%_68.72%_at_55.02%_31.46%,--theme(--color-foreground/.06)_0,hsla(0,0%,55%,.02)_50%,--theme(--color-foreground/.01)_80%)] absolute top-0 left-0 h-320 w-140 -translate-y-87.5 -rotate-45 rounded-full" />
-							<div
-                                className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 left-0 h-320 w-60 [translate:5%_-50%] -rotate-45 rounded-full" />
-							<div
-                                className="bg-[radial-gradient(50%_50%_at_50%_50%,--theme(--color-foreground/.04)_0,--theme(--color-foreground/.01)_80%,transparent_100%)] absolute top-0 left-0 h-320 w-60 -translate-y-87.5 -rotate-45 rounded-full" />
-						</div>
-						<div className="mt-10 flex flex-col gap-8 md:flex-row xl:mt-0">
-							<AnimatedContainer className="w-full max-w-sm min-w-2xs space-y-4">
-								<FrameIcon className="size-8" />
-								<p className="text-muted-foreground mt-8 text-sm md:mt-0">
-									Innovative fintech empowering businesses with seamless
-									payments, lending, and financial infrastructure worldwide.
-								</p>
-								<div className="flex gap-2">
-									{socialLinks.map((link) => (
-										<Button size="icon" variant="outline" className="size-8">
-											<link.icon className="size-4" />
-										</Button>
-									))}
-								</div>
-							</AnimatedContainer>
-							{footerLinkGroups.map((group, index) => (
-								<AnimatedContainer key={group.label} delay={0.1 + index * 0.1} className="w-full">
-									<div className="mb-10 md:mb-0">
-										<h3 className="text-sm uppercase">{group.label}</h3>
-										<ul
-                                            className="text-muted-foreground mt-4 space-y-2  text-sm md:text-xs lg:text-sm">
-											{group.links.map((link) => (
-												<li key={link.title}>
-													<a
-                                                        href={link.href}
-                                                        className="hover:text-foreground inline-flex items-center transition-all duration-300">
-														{link.icon && <link.icon className="me-1 size-4" />}
-														{link.title}
-													</a>
-												</li>
-											))}
-										</ul>
-									</div>
-								</AnimatedContainer>
-							))}
-						</div>
-						<div
-                            className="text-muted-foreground flex flex-col items-center justify-between gap-2 border-t pt-2 text-sm md:flex-row">
-							<p>© 2025 Cognition, Inc. All rights reserved.</p>
-							<p>asme inc.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-        </footer>
-    );
+export function Footer({ className, ...props }) {
+  return (
+    <footer
+      className={cn("relative h-[720px] w-full", className)}
+      style={{ clipPath: "polygon(0 0,100% 0,100% 100%,0 100%)" }}
+      {...props}
+    >
+      {/* STICKY FOOTER MECHANISM */}
+      <div className="fixed bottom-0 h-[720px] w-full">
+        <div className="sticky top-[calc(100vh-720px)] h-full overflow-hidden">
+
+          {/* Background */}
+          <div className="absolute inset-0 z-0">
+            <Component
+              color="rgba(128, 128, 128, 0.8)"
+              animation={{ scale: 100, speed: 90 }}
+              noise={{ opacity: 1, scale: 1.2 }}
+              sizing="fill"
+            />
+          </div>
+
+          {/* CONTENT */}
+          <div className="relative z-10 flex h-full flex-col items-center justify-between px-6 text-center text-white">
+
+            {/* HERO */}
+            <AnimatedContainer className="mt-20 flex flex-col items-center">
+
+              {/* Socials */}
+              <AnimatedContainer delay={0.1} className="mb-8 flex gap-3">
+                {socialLinks.map((link) => (
+                  <Link
+                    key={link.title}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="size-10 border-white/30 text-white hover:bg-white hover:text-black"
+                    >
+                      <link.icon className="size-5" />
+                    </Button>
+                  </Link>
+                ))}
+              </AnimatedContainer>
+
+              {/* Logo */}
+              <AnimatedContainer delay={0.2} className="flex items-center -space-x-5">
+                <Image src="/Logo/C.png" alt="logo" width={150} height={150} />
+                <span className="font-urbanist text-8xl font-semibold tracking-tight">
+                  Cally
+                </span>
+              </AnimatedContainer>
+
+              {/* Tagline */}
+              <AnimatedContainer delay={0.3}>
+                <p className="mt-2 text-xl text-neutral-400 font-urbanist">
+                  The better way to schedule your meetings.
+                </p>
+              </AnimatedContainer>
+
+              {/* CTA */}
+              <AnimatedContainer delay={0.4} className="mt-20">
+                <InteractiveHoverButton text="Get Started" />
+              </AnimatedContainer>
+
+            </AnimatedContainer>
+
+            {/* LINKS */}
+            <AnimatedContainer delay={0.5} className="mt-12">
+              <ul className="flex gap-28 text-sm text-neutral-200 font-urbanist">
+                {footerLinkGroups[0].links.map((link) => (
+                  <li key={link.title}>
+                    <Link href={link.href} className="hover:opacity-100 transition">
+                      {link.title}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </AnimatedContainer>
+
+            {/* BOTTOM BAR (NO ANIMATION) */}
+            <div className="mb-8 w-full flex items-center justify-between text-sm text-neutral-400 font-urbanist">
+              <p>getcally@support.com</p>
+              <p>© 2024 Cally. All rights reserved.</p>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </footer>
+  )
 }
 
 const socialLinks = [
-	{ title: 'Facebook', href: '#', icon: FacebookIcon },
-	{ title: 'Instagram', href: '#', icon: InstagramIcon },
-	{ title: 'Youtube', href: '#', icon: YoutubeIcon },
-	{ title: 'LinkedIn', href: '#', icon: LinkedinIcon },
-];
+    {
+        title: "Instagram",
+        href: "https://www.instagram.com/abhiiiiiii.21/",
+        icon: InstagramIcon,
+    },
+    {
+        title: "LinkedIn",
+        href: "https://www.linkedin.com/in/abhiiiiii21/",
+        icon: LinkedinIcon,
+    },
+]
 
 const footerLinkGroups = [
-	{
-		label: 'Product',
-		links: [
-			{ title: 'Payments', href: '#' },
-			{ title: 'Cards & Issuing', href: '#' },
-			{ title: 'Lending & Credit', href: '#' },
-			{ title: 'Wealth Management', href: '#' },
-			{ title: 'Insurance', href: '#' },
-			{ title: 'Crypto Wallets', href: '#' },
-			{ title: 'FX & Currency Exchange', href: '#' },
-			{ title: 'Treasury Management', href: '#' },
-			{ title: 'Merchant Services', href: '#' },
-			{ title: 'Point of Sale', href: '#' },
-			{ title: 'Embedded Finance', href: '#' },
-			{ title: 'Open Banking API', href: '#' },
-			{ title: 'SDKs & Integrations', href: '#' },
-			{ title: 'Pricing', href: '#' },
-		],
-	},
-	{
-		label: 'Solutions',
-		links: [
-			{ title: 'Startups', href: '#' },
-			{ title: 'Enterprises', href: '#' },
-			{ title: 'Marketplaces', href: '#' },
-			{ title: 'Freelancers', href: '#' },
-			{ title: 'E-commerce', href: '#' },
-			{ title: 'Banks & Credit Unions', href: '#' },
-			{ title: 'Investment Platforms', href: '#' },
-			{ title: 'Insurance Providers', href: '#' },
-			{ title: 'Payment Gateways', href: '#' },
-			{ title: 'Government & Public Sector', href: '#' },
-			{ title: 'Nonprofits', href: '#' },
-			{ title: 'Education', href: '#' },
-			{ title: 'Healthcare', href: '#' },
-		],
-	},
-	{
-		label: 'Resources',
-		links: [
-			{ title: 'Blog', href: '#' },
-			{ title: 'Case Studies', href: '#' },
-			{ title: 'Documentation', href: '#' },
-			{ title: 'API Reference', href: '#' },
-			{ title: 'Developer Tools', href: '#' },
-			{ title: 'Guides & Tutorials', href: '#' },
-			{ title: 'Whitepapers', href: '#' },
-			{ title: 'Reports & Research', href: '#' },
-			{ title: 'Events & Webinars', href: '#' },
-			{ title: 'E-books', href: '#' },
-			{ title: 'Community Forum', href: '#' },
-			{ title: 'Release Notes', href: '#' },
-			{ title: 'System Status', href: '#' },
-		],
-	},
-	{
-		label: 'Company',
-		links: [
-			{ title: 'About Us', href: '#' },
-			{ title: 'Leadership', href: '#' },
-			{ title: 'Careers', href: '#' },
-			{ title: 'Press', href: '#' },
-			{ title: 'Sustainability', href: '#' },
-			{ title: 'Diversity & Inclusion', href: '#' },
-			{ title: 'Investor Relations', href: '#' },
-			{ title: 'Partners', href: '#' },
-			{ title: 'Legal & Compliance', href: '#' },
-			{ title: 'Privacy Policy', href: '#' },
-			{ title: 'Cookie Policy', href: '#' },
-			{ title: 'Terms of Service', href: '#' },
-			{ title: 'AML & KYC Policy', href: '#' },
-			{ title: 'Regulatory Disclosures', href: '#' },
-		],
-	},
+    {
+        label: 'All Features',
+        links: [
+            { title: 'How it Works', href: '#' },
+            { title: 'Integrations', href: '#' },
+            { title: 'Testimonials', href: '#' },
+            { title: 'FAQs', href: '#' },],
+    }
 ];
 
-function AnimatedContainer({
-    delay = 0.1,
-    children,
-    ...props
-}) {
-	const shouldReduceMotion = useReducedMotion();
-
-	if (shouldReduceMotion) {
-		return children;
-	}
-
-	return (
-        <motion.div
-            initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
-            whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay, duration: 0.8 }}
-            {...props}>
-            {children}
-        </motion.div>
-    );
+function AnimatedContainer({ delay = 0.1, children, ...props }) {
+    const shouldReduceMotion = useReducedMotion();
+    if (shouldReduceMotion) { return children; }
+    return (<motion.div initial={{ filter: 'blur(4px)', translateY: -8, opacity: 0 }}
+        whileInView={{ filter: 'blur(0px)', translateY: 0, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ delay, duration: 0.8 }} {...props}> {
+            children}
+    </motion.div>);
 }

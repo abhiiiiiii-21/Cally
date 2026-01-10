@@ -68,34 +68,34 @@ const thirdColumn = testimonials.slice(6, 9);
 
 
 const Testimonials = () => {
-    return (
-        <section className="bg-background relative font-urbanist">
+  return (
+    <section className="bg-background relative font-urbanist">
 
-            <div className="container z-10 mx-auto">
-                <div className="flex flex-col items-center justify-center mx-auto">
-                    <div className="flex justify-center">
-                        <AnimatedBadge
-                            text="Testimonials"
-                            color="#22d3ee"
-                        />
-                    </div>
+      <div className="container z-10 mx-auto">
+        <div className="flex flex-col items-center justify-center mx-auto">
+          <div className="flex justify-center">
+            <AnimatedBadge
+              text="Testimonials"
+              color="#22d3ee"
+            />
+          </div>
 
-                    <h1 className="text-5xl font-semibold tracking-tighter mt-15">
-                        Don't just take our word for it
-                    </h1>
-                    <p className="text-center mt-3 text-neutral-600">
-                    Hear from the professionals who schedule smarter everyday.
-                    </p>
-                </div>
+          <h1 className="text-5xl font-semibold tracking-tighter mt-15">
+            Don't just take our word for it
+          </h1>
+          <p className="text-center mt-3 text-neutral-600">
+            Hear from the professionals who schedule smarter everyday.
+          </p>
+        </div>
 
-                <div className="flex justify-center gap-6 mt-17 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
-                    <TestimonialsColumn testimonials={firstColumn} duration={15} />
-                    <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
-                    <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
-                </div>
-            </div>
-        </section>
-    );
+        <div className="flex justify-center gap-6 mt-17 [mask-image:linear-gradient(to_bottom,transparent,black_25%,black_75%,transparent)] max-h-[740px] overflow-hidden">
+          <TestimonialsColumn testimonials={firstColumn} duration={15} />
+          <TestimonialsColumn testimonials={secondColumn} className="hidden md:block" duration={19} />
+          <TestimonialsColumn testimonials={thirdColumn} className="hidden lg:block" duration={17} />
+        </div>
+      </div>
+    </section>
+  );
 };
 
 export default Testimonials;

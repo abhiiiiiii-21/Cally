@@ -3,17 +3,18 @@ import CardNav from "@/components/ui/CardNav";
 const Navbar = () => {
   const items = [
     {
-      label: "About",
-      bgColor: "#0D0716",
+      label: "Product",
+      bgColor: "#2E2E2E",
       textColor: "#fff",
       links: [
-        { label: "Company", ariaLabel: "About Company" },
-        { label: "Careers", ariaLabel: "About Careers" }
+        { label: "Scheduling", ariaLabel: "Scheduling features" },
+        { label: "Availability", ariaLabel: "Availability management" },
+        { label: "Team Scheduling", ariaLabel: "Team scheduling" }
       ]
     },
     {
-      label: "Projects", 
-      bgColor: "#0D0716",
+      label: "How it works",
+      bgColor: "#2E2E2E",
       textColor: "#fff",
       links: [
         { label: "Featured", ariaLabel: "Featured Projects" },
@@ -22,19 +23,19 @@ const Navbar = () => {
     },
     {
       label: "Contact",
-      bgColor: "#0D0716", 
+      bgColor: "#2E2E2E",
       textColor: "#fff",
       links: [
         { label: "Email", ariaLabel: "Email us" },
-        { label: "Twitter", ariaLabel: "Twitter" },
+        { label: "Instagram", ariaLabel: "Instagram" },
         { label: "LinkedIn", ariaLabel: "LinkedIn" }
       ]
     }
   ];
 
-return (
+  return (
     <CardNav
-      logo= "/Logo/C.png"
+      logo="/Logo/C.png"
       logoAlt="Company Logo"
       items={items}
       baseColor="#1a1a1a"
@@ -42,7 +43,7 @@ return (
       buttonBgColor="#e9ecef"
       buttonTextColor="#1a1a1a"
       ease="power3.out"
-      className="font-urbanist"
+      className="font-urbanist fixed"
     />
   );
 };

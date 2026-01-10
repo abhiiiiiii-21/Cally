@@ -11,7 +11,6 @@ const CTA = () => {
         <ParallaxImage />
       </section>
 
-
       <Footer />
     </main>
   )

@@ -3,7 +3,7 @@ import React from 'react'
 import IntegrationsSection from '@/components/integrations-5'
 import AnimatedBadge from '@/components/ui/animated-badge'
 
-const Intergrations = () => {
+const Integrations = () => {
   return (
     <section className='flex flex-col items-center mt-30 font-urbanist justify-center'>
       <AnimatedBadge
@@ -16,4 +16,4 @@ const Intergrations = () => {
   )
 }
 
-export default Intergrations
+export default Integrations
