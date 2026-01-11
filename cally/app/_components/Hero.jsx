@@ -1,9 +1,18 @@
+
 import React from 'react'
 import DemoOne from './_Hero/DemoOne'
 import AnnouncementBadge from './_Hero/AnnouncementBadge'
 import { RippleButton } from '@/components/ui/ripple-button'
+import { TextRoll } from '@/components/ui/text-roll'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
 
 const Hero = () => {
+  const router = useRouter();
+
+  function onClickStart() {
+    router.push("/auth/log-in");
+  }
 
   return (
     <div className="relative w-full h-screen overflow-hidden">
@@ -28,8 +37,10 @@ const Hero = () => {
           </p>
         </div>
 
-
-        <RippleButton rippleColor="#2E2E2E">Try Now</RippleButton>
+        <div className='flex gap-3 mt-6'>
+          <Button className="rounded-[calc(0.75rem-0.2rem)] cursor-pointer py-2 font-urbanist font-semibold" size="lg">Book a Demo</Button>
+          <RippleButton rippleColor="#6c757d" onClick={onClickStart}>Start scheduling</RippleButton>
+        </div>
       </div>
     </div>
   )
