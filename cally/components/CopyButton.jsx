@@ -31,7 +31,7 @@ export default function CopyButton() {
         <TooltipTrigger asChild>
           <Button
             aria-label={copied ? "Copied" : "Copy to clipboard"}
-            className="disabled:opacity-100"
+            className="disabled:opacity-100 cursor-pointer"
             disabled={copied}
             onClick={handleCopy}
             size="icon"

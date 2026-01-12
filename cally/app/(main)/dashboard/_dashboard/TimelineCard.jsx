@@ -1,36 +1,39 @@
 import { RoadmapCard } from '@/components/ui/roadmap-card'
 import React from 'react'
 
+
+// status done,in-progress,upcoming
 const TimelineCard = () => {
     return (
         <section>
             <RoadmapCard
                 items={[
                     {
-                        quarter: "Q1 2023",
-                        title: "Core Platform",
+                        startTime: "2026-01-12T14:00:00+05:30",
+                        endTime: "2026-01-12T14:30:00+05:30",
+                        eventTitle: "Core Platform",
                         description: "Basic functionality and user management",
-                        status: "done",
                     },
                     {
-                        quarter: "Q2 2023",
-                        title: "Analytics",
+                        startTime: "2026-01-12T15:00:00+05:30",
+                        endTime: "2026-01-12T15:30:00+05:30",
+                        eventTitle: "Analytics",
                         description: "Reporting and data visualization",
-                        status: "in-progress",
                     },
                     {
-                        quarter: "Q3 2023",
-                        title: "Integrations",
+                        startTime: "2026-01-12T16:00:00+05:30",
+                        endTime: "2026-01-12T16:30:00+05:30",
+                        eventTitle: "Integrations",
                         description: "Third-party app connections",
-                        status: "upcoming",
                     },
                     {
-                        quarter: "Q4 2023",
-                        title: "AI Features",
+                        startTime: "2026-01-12T17:00:00+05:30",
+                        endTime: "2026-01-12T17:30:00+05:30",
+                        eventTitle: "AI Features",
                         description: "Smart automation and predictions",
-                        status: "upcoming",
-                    },
-                ]}/>
+                    }
+
+                ]} />
         </section>
     )
 }

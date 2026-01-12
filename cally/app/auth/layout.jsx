@@ -39,12 +39,10 @@ export default function Layout({ children }) {
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 min-h-screen">
-      {/* Left side: dynamic sign in / sign up form */}
       <div className="flex items-center justify-center">
         {children}
       </div>
 
-      {/* Right side: static 3D component */}
       <div className="hidden lg:block w-full bg-gray-950/5">
         <ThreeDMarquee images={images} />
       </div>

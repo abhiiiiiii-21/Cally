@@ -312,16 +312,6 @@ export function EventCalendar({
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button
-              className="max-[479px]:aspect-square max-[479px]:p-0!"
-              onClick={() => {
-                setSelectedEvent(null); // Ensure we're creating a new event
-                setIsEventDialogOpen(true);
-              }}
-              size="sm">
-              <PlusIcon aria-hidden="true" className="sm:-ms-1 opacity-60" size={16} />
-              <span className="max-sm:sr-only">New event</span>
-            </Button>
           </div>
         </div>
 

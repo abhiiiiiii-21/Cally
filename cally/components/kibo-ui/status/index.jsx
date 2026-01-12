@@ -23,7 +23,8 @@ export const StatusIndicator = ({
         "group-[.online]:bg-emerald-500",
         "group-[.offline]:bg-red-500",
         "group-[.maintenance]:bg-blue-500",
-        "group-[.degraded]:bg-amber-500"
+        "group-[.degraded]:bg-amber-500",
+        "group-[.live]:bg-white"
       )} />
     <span
       className={cn(
@@ -31,7 +32,8 @@ export const StatusIndicator = ({
         "group-[.online]:bg-emerald-500",
         "group-[.offline]:bg-red-500",
         "group-[.maintenance]:bg-blue-500",
-        "group-[.degraded]:bg-amber-500"
+        "group-[.degraded]:bg-amber-500",
+        "group-[.live]:bg-white"
       )} />
   </span>
 );
@@ -48,6 +50,7 @@ export const StatusLabel = ({
         <span className="hidden group-[.offline]:block">Offline</span>
         <span className="hidden group-[.maintenance]:block">Maintenance</span>
         <span className="hidden group-[.degraded]:block">Degraded</span>
+        <span className="hidden group-[.live]:block">Live</span>
       </>
     )}
   </span>

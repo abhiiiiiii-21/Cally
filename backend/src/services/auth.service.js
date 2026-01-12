@@ -9,9 +9,12 @@ const signup = async (data) => {
         throw new Error("Some fields are missing");
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+    const normalizedUsername = username.trim().toLowerCase();
+
     const existingUser = await prisma.user.findFirst({
         where: {
-            OR: [{ username }, { email }],
+            OR: [{ email : normalizedEmail }, { username :normalizedUsername }],
         },
     });
 
@@ -24,8 +27,8 @@ const signup = async (data) => {
 
     const user = await prisma.user.create({
         data: {
-            username,
-            email,
+            username : normalizedUsername,
+            email : normalizedEmail,
             password: hashedPassword,
         },
     });

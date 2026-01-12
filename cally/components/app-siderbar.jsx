@@ -1,6 +1,6 @@
 "use client"
 
-import * as React from "react"
+import React, { useEffect, useState } from "react"
 import {
   CalendarIcon,
   ClockIcon,
@@ -59,28 +59,37 @@ const data = {
 
 export function AppSidebar(props) {
   const router = useRouter();
-  const [user, setUser] = React.useState({
-    name: "User",
-    email: "user@example.com",
-    avatar: "/Profile/Avatar1.png",
-  });
 
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setUser({
-          name: "John Doe",
-          email: "john@example.com",
-          avatar: "https://github.com/shadcn.png",
-        });
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
+  const [user, setUser] = useState({ name: "", email: "", avatar: "" });
+  const [loading, setLoading] = useState(true)
+
+  const userData = async () => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/me`, {
+        method: 'GET',
+        credentials: "include",
+        headers: {
+          'Content-type': 'application/json'
+        }
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user!");
       }
-    };
-    fetchUser();
-  }, []);
+
+      const data = await res.json()
+
+      setUser({ name: data.name, email: data.email, avatar: data.profilePic })
+    } catch (error) {
+      console.error("User fetch failed:", error)
+    }finally{
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    userData()
+  }, [])
 
   function onClickIcon() {
     router.push("/");
@@ -110,7 +119,7 @@ export function AppSidebar(props) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+         {!loading && <NavUser user={user} />}
       </SidebarFooter>
     </Sidebar>
   )

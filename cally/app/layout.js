@@ -1,7 +1,9 @@
-import {Raleway, Urbanist } from "next/font/google";
+import { Raleway, Urbanist } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 
+
+import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -11,8 +13,8 @@ const raleway = Raleway({
 
 const urbanist = Urbanist({
   subsets: ["latin"],
-  variable: "--font-urbanist", 
-  weight: ["400", "500", "600", "700"], 
+  variable: "--font-urbanist",
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata = {
@@ -32,7 +34,11 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <ToastProvider position="bottom-center">
+            <AnchoredToastProvider>
+              {children}
+            </AnchoredToastProvider>
+          </ToastProvider>
         </ThemeProvider>
       </body>
     </html>
