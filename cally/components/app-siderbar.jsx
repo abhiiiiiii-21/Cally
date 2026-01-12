@@ -65,11 +65,18 @@ export function AppSidebar(props) {
 
   const userData = async () => {
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/user/me`, {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        console.error("No token found in localStorage");
+        return;
+      }
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/me`, {
         method: 'GET',
-        credentials: "include",
         headers: {
-          'Content-type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         }
       })
 
@@ -79,14 +86,13 @@ export function AppSidebar(props) {
 
       const data = await res.json()
 
-      setUser({ name: data.name, email: data.email, avatar: data.profilePic })
+      setUser({ name: data.username, email: data.email, avatar: data.profilePic })
     } catch (error) {
       console.error("User fetch failed:", error)
-    }finally{
+    } finally {
       setLoading(false)
     }
   }
-
   useEffect(() => {
     userData()
   }, [])
@@ -119,7 +125,7 @@ export function AppSidebar(props) {
         <NavMain items={data.navMain} />
       </SidebarContent>
       <SidebarFooter>
-         {!loading && <NavUser user={user} />}
+        {!loading && <NavUser user={user} />}
       </SidebarFooter>
     </Sidebar>
   )

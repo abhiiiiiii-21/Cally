@@ -52,6 +52,10 @@ export default function SignUpForm() {
         return;
       }
 
+      if (data.token) {
+        localStorage.setItem('token', data.token);
+      }
+
       toastManager.add({
         title: "Account created successfully!",
         description: "Welcome to Cally!",
