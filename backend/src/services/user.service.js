@@ -22,7 +22,7 @@ const getUser = async (userId) => {
 }
 
 const updateUser = async (userId, data) => {
-    const { username, fullname, profilePic, about } = data
+    const { username, fullname, about } = data
 
     const updateData = {}
 
@@ -38,12 +38,8 @@ const updateUser = async (userId, data) => {
         updateData.username = username
     }
 
-
     if (fullname !== undefined) {
         updateData.fullname = fullname
-    }
-    if (profilePic !== undefined) {
-        updateData.profilePic = profilePic
     }
     if (about !== undefined) {
         updateData.about = about
@@ -59,12 +55,33 @@ const updateUser = async (userId, data) => {
             id: true,
             username: true,
             fullname: true,
-            profilePic: true,
             about: true
         }
     })
 
     return user
+}
+
+const updateUserProfilePic = async (userId,data) => {
+    const {profilePic} = data
+
+    const updatedProfilePic = {}
+
+    if (profilePic !== undefined) {
+        updatedProfilePic.profilePic = profilePic
+    }
+
+    const user = await prisma.user.update({
+        where : {
+            id : userId
+        },
+        data : {
+            profilePic : updatedProfilePic.profilePic
+        }
+    })
+
+    return user
+    
 }
 
 const changeUserPassword = async (userId, oldPassword, newPassword) => {
@@ -115,6 +132,7 @@ const deleteUser = async (userId) => {
     return { "message": "User Deleted Successfully!" }
 }
 
+
 // const logoutUser = async (userId) => {
 //     const logout = await prisma.user.findUnique({
 //         where: { id: userId }
@@ -124,4 +142,4 @@ const deleteUser = async (userId) => {
 
 // }
 
-module.exports = { getUser, updateUser, deleteUser, changeUserPassword }
+module.exports = { getUser, updateUser, updateUserProfilePic, deleteUser, changeUserPassword }

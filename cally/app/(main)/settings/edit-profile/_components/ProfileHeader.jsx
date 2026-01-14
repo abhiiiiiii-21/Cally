@@ -4,8 +4,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Mail } from "lucide-react";
 import { useFileUpload } from "@/hooks/use-file-upload";
-
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 
 const MOCK_USER = {
@@ -15,7 +15,8 @@ const MOCK_USER = {
 };
 
 export default function ProfileHeader() {
-  const [user, setUser] = useState(null);
+  const router = useRouter()
+  const [user, setUser] = useState({username : "",email : "",profilePic : ""});
   const [loading, setLoading] = useState(true);
 
   const [{ files }, { removeFile, openFileDialog, getInputProps }] =
@@ -26,23 +27,42 @@ export default function ProfileHeader() {
   const previewUrl = files[0]?.preview || null;
   const fileName = files[0]?.file.name || null;
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        // Simulate API delay
-        await new Promise(resolve => setTimeout(resolve, 500));
-        setUser(MOCK_USER);
-      } catch (error) {
-        console.error("Failed to fetch user:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchUser();
-  }, []);
+  const userData = async () => {
+    try {
+      setLoading(true)
+      const token = localStorage.getItem('token')
 
-  if (loading) return <div>Loading...</div>;
-  if (!user) return <div>User not found</div>;
+      if (!token) {
+        router.push('/auth/log-in')
+        return;
+      }
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/me`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+      })
+
+      if (!res.ok) {
+        throw new Error("Failed to fetch user");
+      }
+
+      const data = await res.json()
+
+      setUser({username : data.username, email : data.email, profilePic : data.profilePic})
+
+    } catch (error) {
+       console.error("User fetch failed:", error)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  useEffect(() => {
+    userData()
+  }, [])
 
   return (
     <Card className="bg-black text-white">
@@ -60,13 +80,12 @@ export default function ProfileHeader() {
             ) : (
               <div aria-hidden="true">
                 <Avatar className="h-24 w-24 size-full object-cover">
-                  <AvatarImage src={user.avatar} alt="Profile" />
+                  <AvatarImage src={'/Profile/avatar.png'} alt="Profile" />
                 </Avatar>
 
               </div>
             )}
           </div>
-
           <div className="flex-1 space-y-2">
             <h1 className="text-2xl font-bold">{user.username}</h1>
 

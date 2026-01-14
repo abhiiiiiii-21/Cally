@@ -43,25 +43,28 @@ const MainCard = () => {
                 </div>
             </div>
 
-            <div className="col-span-1 bg-background border border-border rounded-xl px-6 py-5 flex flex-col gap-3 ">
+            <div className="col-span-1 bg-background border border-border rounded-xl px-6 py-5 flex flex-col">
                 <p className="text-sm text-muted-foreground">
                     Your booking link
                 </p>
 
-                <div className="rounded-md border bg-neutral-900 px-3 py-2 text-sm font-medium">
-                    getcally.vercel.app/abhishek
-                </div>
+                <div className='mt-6'>
 
-                <div className="mt-2 flex gap-2 ">
-                    <Button variant="" size="" className="flex-1 cursor-pointer">
-                        <SquareArrowOutUpRightIcon size={16} />
-                        View
-                    </Button>
+                    <div className="rounded-md border bg-neutral-900 px-3 py-2 text-sm font-medium">
+                        getcally.vercel.app/abhishek
+                    </div>
 
-                    <Button variant="outline" size="" className="flex-1 cursor-pointer" >
-                        <CopyIcon size={16} />
-                        Copy
-                    </Button>
+                    <div className="mt-2 flex gap-2">
+                        <Button variant="" size="" className="flex-1 cursor-pointer">
+                            <SquareArrowOutUpRightIcon size={16} />
+                            View
+                        </Button>
+
+                        <Button variant="outline" size="" className="flex-1 cursor-pointer" >
+                            <CopyIcon size={16} />
+                            Copy
+                        </Button>
+                    </div>
                 </div>
             </div>
         </section>

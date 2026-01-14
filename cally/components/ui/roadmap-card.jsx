@@ -3,9 +3,7 @@ import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-export function RoadmapCard({ title = "Timeline", description = "A real-time view of what's scheduled for today.", items }
-
-) {
+export function RoadmapCard({ title = "Timeline", description = "A real-time view of what's scheduled for today.", items }) {
 
   const now = new Date()
   const statusVariantMap = {
