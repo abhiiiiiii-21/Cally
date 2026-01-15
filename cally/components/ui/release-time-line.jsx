@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button";
 export const defaultEntries = [
   {
     icon: Package,
-    title: "Advanced Component Pack",
-    subtitle: "Version 2.1.0 • Feb 2025",
+    title: "Create Account",
+    subtitle: "",
     description:
       "Ruixen UI now ships with an advanced component pack including complex layouts, enterprise-ready data tables, and animated navigation menus.",
     items: [
@@ -20,8 +20,8 @@ export const defaultEntries = [
     image:
       "https://pub-940ccf6255b54fa799a9b01050e6c227.r2.dev/dashboard-gradient.png",
     button: {
-      url: "https://ruixenui.com",
-      text: "Explore Components",
+      url: "",
+      text: "Create Account",
     },
   },
   {
@@ -164,8 +164,8 @@ export default function TimeLine_01({
                   className={
                     "flex flex-col rounded-2xl border p-3 transition-all duration-300 " +
                     (isActive
-                      ? "border-gray-50 dark:border-gray-800 bg-gray-50 dark:bg-black shadow-lg"
-                      : "border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black")
+                      ? " border-[#333333] bg-black shadow-lg"
+                      : "border-[#333333] bg-black")
                   }>
                   {entry.image && (
                     <img
@@ -210,7 +210,7 @@ export default function TimeLine_01({
                         <div className="space-y-4 pt-2">
                           {entry.items && entry.items.length > 0 && (
                             <div
-                              className="rounded-lg border border-gray-200 dark:border-gray-800 bg-gray-50 dark:bg-black p-4">
+                              className="rounded-lg border border-[#333333] bg-black p-4">
                               <ul className="space-y-2">
                                 {entry.items.map((item, itemIndex) => (
                                   <li
