@@ -11,7 +11,9 @@ export default function ProfileTabs() {
     const router = useRouter()
     const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
-    const [userData, setUserData] = useState({ fullname: "", username: "", email: "", about: "", profilePic: "" });
+    const [userData, setUserData] = useState({ fullname: "", username: "", email: "", about: "" });
+    const [originalData, setOriginalData] = useState(null)
+
 
     const fetchUserData = async () => {
         try {
@@ -39,6 +41,7 @@ export default function ProfileTabs() {
             const data = await res.json()
 
             setUserData({ fullname: data.fullname, username: data.username, email: data.email, about: data.about, profilePic: data.profilePic, passwordUpdatedAt: data.passwordUpdatedAt })
+            setOriginalData({ fullname: data.fullname, username: data.username, email: data.email, about: data.about, profilePic: data.profilePic, passwordUpdatedAt: data.passwordUpdatedAt })
         } catch (error) {
             console.error("User fetch failed:", error)
         } finally {
@@ -52,7 +55,7 @@ export default function ProfileTabs() {
             const token = localStorage.getItem('token')
 
             if (!token) {
-                router.push('/auth/login')
+                router.push('/auth/log-in')
                 return
             }
 
@@ -76,11 +79,11 @@ export default function ProfileTabs() {
             const updatedData = await res.json()
 
             setUserData({ ...userData, fullname: updatedData.fullname, username: updatedData.username, about: updatedData.about })
-
+            setOriginalData({ fullname: updatedData.fullname, username: updatedData.username, about: updatedData.about })
             toastManager.add({
                 description: "Profile updated successfully!",
                 title: "Success!",
-                variant: "default",
+                type: "success",
             })
 
         } catch (error) {
@@ -90,10 +93,55 @@ export default function ProfileTabs() {
             toastManager.add({
                 description: "Failed to update profile! Please try again.",
                 title: "Error!",
-                variant: "destructive",
+                type: "destructive",
             })
         } finally {
             setUpdating(false)
+        }
+    }
+
+    const deleteUserData = async () => {
+        try {
+            const token = localStorage.getItem('token')
+
+            if (!token) {
+                router.push('/auth/log-in')
+                return
+            }
+
+            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/me`, {
+                method: "DELETE",
+                headers: {
+                    'Content-Type': "application/json",
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+
+            const data = await res.json()
+
+            if (!res.ok) {
+                throw new Error(data.message || 'Failed to delete!')
+            }
+
+
+            toastManager.add({
+                description: "Profile deleted successfully!",
+                title: "Success!",
+                type: "success",
+            })
+
+
+            localStorage.removeItem('token')
+            router.push('/auth/log-in')
+
+        } catch (error) {
+            console.log({ "error": error.message })
+
+            toastManager.add({
+                description: "Failed to delete profile! Please try again.",
+                title: "Error!",
+                type: "destructive",
+            })
         }
     }
 
@@ -113,12 +161,12 @@ export default function ProfileTabs() {
 
             {/* First */}
             <TabsContent value="personal" className="space-y-6">
-                <Tab1 userData={userData} setUserData={setUserData} updateUserData={updateUserData} updating={updating} loading={loading} />
+                <Tab1 userData={userData} setUserData={setUserData} updateUserData={updateUserData} updating={updating} loading={loading} originalData={originalData} />
             </TabsContent>
 
             {/* Second */}
             <TabsContent value="account" className="space-y-6">
-                <Tab2 userData={userData} />
+                <Tab2 userData={userData} deleteUserData={deleteUserData} />
             </TabsContent>
 
             {/* Third */}

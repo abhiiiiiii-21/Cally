@@ -7,9 +7,25 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { Trash2 } from 'lucide-react'
 import React, { useState } from 'react'
+import { toastManager } from '@/components/ui/toast'
 
-const Tab2 = ({ userData }) => {
+const Tab2 = ({ userData, deleteUserData }) => {
     const [inputValue, setInputValue] = useState("");
+
+    function handleDeleteClick() {
+
+        if (userData.username !== inputValue.trim()) {
+            toastManager.add({
+                description: "Username does not match!",
+                title: "Error!",
+                type: "destructive",
+            })
+        }
+        else {
+            deleteUserData()
+        }
+    }
+
 
     return (
         <>
@@ -44,7 +60,7 @@ const Tab2 = ({ userData }) => {
                                 Download a copy of your data
                             </p>
                         </div>
-                        <Button size="sm" variant="outline">
+                        <Button size="sm" variant="outline" className="cursor-pointer">
                             Export Data
                         </Button>
                     </div>
@@ -86,16 +102,16 @@ const Tab2 = ({ userData }) => {
                                 </DialogDescription>
                             </DialogHeader>
 
-                            <Input value={inputValue} placeholder={`Type ${userData.username}`} />
+                            <Input placeholder={`Type ${userData.username}`} value={inputValue} onChange={(e) => setInputValue(e.target.value)} />
 
                             <DialogFooter>
                                 <DialogClose asChild>
-                                    <Button variant="outline" className="cursor-pointer">
+                                    <Button variant="outline" className="cursor-pointer" size="sm">
                                         Cancel
                                     </Button>
                                 </DialogClose>
 
-                                <Button className="cursor-pointer">
+                                <Button className="cursor-pointer" size="sm" variant="destructive" onClick={handleDeleteClick}>
                                     Delete
                                 </Button>
                             </DialogFooter>

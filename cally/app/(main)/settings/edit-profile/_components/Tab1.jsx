@@ -7,15 +7,33 @@ import { InfoIcon } from 'lucide-react'
 import React from 'react'
 
 
-const Tab1 = ({ userData, setUserData, updateUserData, updating, loading }) => {
+const Tab1 = ({ userData, setUserData, updateUserData, updating, loading, originalData }) => {
 
     function usernameValidation(e) {
         const username = e.target.value;
+
+        if (username === ""){
+            setUserData({ ...userData, username: "" });
+            return 
+        }
         const usernameRegex = /^[a-zA-Z0-9_]+$/;
 
         if (usernameRegex.test(username)) {
             setUserData({ ...userData, username });
         }
+    }
+
+    function checkingDataChanges(){
+        if (!originalData){
+            return false
+        }
+
+        return (userData.fullname !== originalData.fullname || userData.username !== originalData.username || userData.about !== originalData.about)
+
+    }
+
+    function isUsernameValid(){
+        return (userData.username && userData.username.trim() !== "")
     }
 
     return (
@@ -82,7 +100,7 @@ const Tab1 = ({ userData, setUserData, updateUserData, updating, loading }) => {
             </Card>
 
             <div className="flex justify-end">
-                <Button size="sm" onClick={updateUserData} disabled={updating} className="cursor-pointer">
+                <Button size="sm" onClick={updateUserData} disabled={updating || !checkingDataChanges() || !isUsernameValid()} className="cursor-pointer">
                     {updating ? "Saving..." : "Save Changes"}
                 </Button>
             </div>
