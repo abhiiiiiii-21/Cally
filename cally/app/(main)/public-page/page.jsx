@@ -2,9 +2,10 @@ import React from 'react'
 
 const page = () => {
   return (
-    <div>
-        Public Page
-    </div>
+    <main>
+      public page
+      
+    </main>
   )
 }
 
