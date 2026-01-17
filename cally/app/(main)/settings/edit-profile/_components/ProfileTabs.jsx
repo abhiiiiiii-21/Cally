@@ -91,9 +91,9 @@ export default function ProfileTabs() {
 
 
             toastManager.add({
-                description: "Failed to update profile! Please try again.",
+                description: "Username already exists! Please try again.",
                 title: "Error!",
-                type: "destructive",
+                type: "error",
             })
         } finally {
             setUpdating(false)
@@ -140,7 +140,7 @@ export default function ProfileTabs() {
             toastManager.add({
                 description: "Failed to delete profile! Please try again.",
                 title: "Error!",
-                type: "destructive",
+                type: "error",
             })
         }
     }

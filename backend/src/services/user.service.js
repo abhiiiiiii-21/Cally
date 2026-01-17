@@ -62,8 +62,8 @@ const updateUser = async (userId, data) => {
     return user
 }
 
-const updateUserProfilePic = async (userId,data) => {
-    const {profilePic} = data
+const updateUserProfilePic = async (userId, data) => {
+    const { profilePic } = data
 
     const updatedProfilePic = {}
 
@@ -72,22 +72,22 @@ const updateUserProfilePic = async (userId,data) => {
     }
 
     const user = await prisma.user.update({
-        where : {
-            id : userId
+        where: {
+            id: userId
         },
-        data : {
-            profilePic : updatedProfilePic.profilePic
+        data: {
+            profilePic: updatedProfilePic.profilePic
         }
     })
 
     return user
-    
+
 }
 
 const changeUserPassword = async (userId, oldPassword, newPassword) => {
     const user = await prisma.user.findUnique({
         where: {
-            id : userId
+            id: userId
         }
     })
 
@@ -132,14 +132,135 @@ const deleteUser = async (userId) => {
     return { "message": "User Deleted Successfully!" }
 }
 
+const exportUserData = async (userId) => {
 
-// const logoutUser = async (userId) => {
-//     const logout = await prisma.user.findUnique({
-//         where: { id: userId }
-//     })
+    const userData = await prisma.user.findUnique({
+        where: { id: userId },
+        select: {
+            id: true,
+            username: true,
+            email: true,
+            fullname: true,
+            profilePic: true,
+            about: true,
+            createdAt: true,
+            updatedAt: true,
+            passwordUpdatedAt : true,
 
 
+            events: {
+                select: {
+                    id: true,
+                    title: true,
+                    description: true,
+                    duration: true,
+                    showOnProfile: true,
+                    createdAt: true,
+                    updatedAt: true,
 
-// }
+                    meetings: {
+                        select: {
+                            id: true,
+                            status: true,
+                            attendeeName: true,
+                            attendeeEmail: true,
+                            additionalInfo: true,
+                            meetingDate: true,
+                            startTime: true,
+                            endTime: true,
+                            meetingUrl: true,
+                            googleEventId: true,
+                            createdAt: true,
+                            updatedAt: true,
+                        }
+                    }
+                }
+            },
 
-module.exports = { getUser, updateUser, updateUserProfilePic, deleteUser, changeUserPassword }
+            meetings: {
+                select: {
+                    id: true,
+                    status: true,
+                    attendeeName: true,
+                    attendeeEmail: true,
+                    additionalInfo: true,
+                    meetingDate: true,
+                    startTime: true,
+                    endTime: true,
+                    meetingUrl: true,
+                    googleEventId: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    event: {
+                        select: {
+                            id: true,
+                            title: true,
+                            description: true,
+                            duration: true,
+                        }
+                    }
+                }
+            },
+
+            availabilities: {
+                select: {
+                    id: true,
+                    title: true,
+                    isdefault: true,
+                    timeGap: true,
+                    createdAt: true,
+                    updatedAt: true,
+                    days: {
+                        select: {
+                            id: true,
+                            day: true,
+                            startTime: true,
+                            endTime: true,
+                        }
+                    }
+                }
+            }
+        }
+    });
+
+
+    if (!userData) {
+        throw new Error("User not found");
+    }
+
+
+    const exportData = {
+        exportedAt: new Date().toISOString(),
+        user: {
+            id: userData.id,
+            username: userData.username,
+            email: userData.email,
+            fullname: userData.fullname,
+            profilePic: userData.profilePic,
+            about: userData.about,
+            createdAt: userData.createdAt,
+            updatedAt: userData.updatedAt,
+            passwordUpdatedAt : userData.passwordUpdatedAt
+        },
+
+        events: userData.events,
+
+        meetings: userData.meetings,
+
+        availabilities: userData.availabilities,
+
+        statistics: {
+            totalEvents: userData.events.length,
+            totalMeetings: userData.meetings.length,
+            totalAvailabilities: userData.availabilities.length,
+            upcomingMeetings: userData.meetings.filter(m => m.status === 'UPCOMING').length,
+            pastMeetings: userData.meetings.filter(m => m.status === 'PAST').length,
+            cancelledMeetings: userData.meetings.filter(m => m.status === 'CANCELLED').length,
+        }
+    };
+
+    return exportData
+
+}
+
+module.exports = { getUser, updateUser, updateUserProfilePic, deleteUser, changeUserPassword, exportUserData}

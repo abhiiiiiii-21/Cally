@@ -1,4 +1,4 @@
-const { getUser, updateUser, deleteUser, changeUserPassword } = require('../services/user.service');
+const { getUser, updateUser, deleteUser, changeUserPassword, exportUserData } = require('../services/user.service');
 
 const getUserController = async (req, res) => {
     try {
@@ -42,15 +42,15 @@ const passwordUserController = async (req, res) => {
     }
 }
 
-// const logoutUserController = async (req,res) => {
-//     try {
-//         const user = await logoutUser(req.user.userId)
-//         return res.status(200).json(user)
-//     } catch (error) {
-//         return res.status(400).json({"message" : error.message})
-//     }
-// }
+const exportUserDataController = async (req, res) => {
+    try {
+        const exportData = await exportUserData(req.user.userId)
+        return res.status(200).json(exportData)
+    } catch (error) {
+        return res.status(400).json({ "message": error.message })
+    }
+}
 
 
 
-module.exports = { getUserController, updateUserController, deleteUserController, passwordUserController }
+module.exports = { getUserController, updateUserController, deleteUserController, passwordUserController, exportUserDataController }
