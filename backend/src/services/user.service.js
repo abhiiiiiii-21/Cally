@@ -1,4 +1,5 @@
 const prisma = require('../config/prisma')
+const cloudinary = require('../config/cloudinary')
 const bcrypt = require('bcrypt')
 
 const getUser = async (userId) => {
@@ -62,28 +63,6 @@ const updateUser = async (userId, data) => {
     return user
 }
 
-const updateUserProfilePic = async (userId, data) => {
-    const { profilePic } = data
-
-    const updatedProfilePic = {}
-
-    if (profilePic !== undefined) {
-        updatedProfilePic.profilePic = profilePic
-    }
-
-    const user = await prisma.user.update({
-        where: {
-            id: userId
-        },
-        data: {
-            profilePic: updatedProfilePic.profilePic
-        }
-    })
-
-    return user
-
-}
-
 const changeUserPassword = async (userId, oldPassword, newPassword) => {
     const user = await prisma.user.findUnique({
         where: {
@@ -145,7 +124,7 @@ const exportUserData = async (userId) => {
             about: true,
             createdAt: true,
             updatedAt: true,
-            passwordUpdatedAt : true,
+            passwordUpdatedAt: true,
 
 
             events: {
@@ -240,7 +219,7 @@ const exportUserData = async (userId) => {
             about: userData.about,
             createdAt: userData.createdAt,
             updatedAt: userData.updatedAt,
-            passwordUpdatedAt : userData.passwordUpdatedAt
+            passwordUpdatedAt: userData.passwordUpdatedAt
         },
 
         events: userData.events,
@@ -263,4 +242,38 @@ const exportUserData = async (userId) => {
 
 }
 
-module.exports = { getUser, updateUser, updateUserProfilePic, deleteUser, changeUserPassword, exportUserData}
+const updateUserProfilePic = async (userId, file) => {
+
+    if (!file) {
+        throw new Error("File not provided!");
+    }
+
+
+    const uploadImage = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream({
+            folder: 'cally/profile-pictures',
+            transformation: [
+                { width: 400, height: 400, crop: "fill", gravity: "face" },
+                { quality: "auto", fetch_format: "auto" }
+            ]
+        }, (error, result) => {
+            if (error) {
+                return reject(error);
+            }
+            resolve(result);
+        })
+        uploadStream.end(file.buffer);
+    })
+
+    const user = await prisma.user.update({
+        where: {id: userId},
+        data: {
+            profilePic: uploadImage.secure_url}
+    })
+
+    return user
+
+}
+
+
+module.exports = { getUser, updateUser, deleteUser, changeUserPassword, exportUserData, updateUserProfilePic }

@@ -50,7 +50,7 @@ const Tab1 = ({ userData, setUserData, updateUserData, updating, loading, origin
                     <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                         <div className="space-y-2">
                             <Label>Full Name</Label>
-                            <Input value={userData.fullname} placeholder="Enter your full name" onChange={(e) => setUserData({ ...userData, fullname: e.target.value })} />
+                            <Input value={userData.fullname || ""} placeholder="Enter your full name" onChange={(e) => setUserData({ ...userData, fullname: e.target.value })} />
                         </div>
 
                         <div className="space-y-2">
@@ -90,7 +90,7 @@ const Tab1 = ({ userData, setUserData, updateUserData, updating, loading, origin
                     <div className="space-y-2">
                         <Label>About</Label>
                         <div className="flex flex-col gap-1">
-                            <Textarea maxLength={500} rows={4} value={userData.about} placeholder="Tell others about yourself... Share your role, expertise, or interests." onChange={(e) => setUserData({ ...userData, about: e.target.value })} />
+                            <Textarea maxLength={500} rows={4} value={userData.about || ""} placeholder="Tell others about yourself... Share your role, expertise, or interests." onChange={(e) => setUserData({ ...userData, about: e.target.value })} />
                             <p className="text-xs text-muted-foreground text-right">
                                 {(userData.about || "").length}/500 characters
                             </p>

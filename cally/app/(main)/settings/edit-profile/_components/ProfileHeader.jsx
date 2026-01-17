@@ -7,13 +7,6 @@ import { useFileUpload } from "@/hooks/use-file-upload";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-
-const MOCK_USER = {
-  username: "johndoe",
-  email: "john@example.com",
-  avatar: "https://github.com/shadcn.png",
-};
-
 export default function ProfileHeader() {
   const router = useRouter()
   const [user, setUser] = useState({username : "",email : "",profilePic : ""});

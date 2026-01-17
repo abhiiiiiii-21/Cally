@@ -1,4 +1,4 @@
-const { getUser, updateUser, deleteUser, changeUserPassword, exportUserData } = require('../services/user.service');
+const { getUser, updateUser, deleteUser, changeUserPassword, exportUserData, updateUserProfilePic } = require('../services/user.service');
 
 const getUserController = async (req, res) => {
     try {
@@ -51,6 +51,21 @@ const exportUserDataController = async (req, res) => {
     }
 }
 
+const updateUserProfilePicController = async (req,res) => {
+    if (!req.file){
+        return res.status(400).json({"error" : 'No image uploaded!'})
+    }
+
+    try {
+        const updateUserProfile = await updateUserProfilePic(req.user.userId, req.file)
+        return res.status(200).json(updateUserProfile)
+
+    } catch (error){
+        return res.status(400).json({"message" :  error.message})
+    }
+    
+}
 
 
-module.exports = { getUserController, updateUserController, deleteUserController, passwordUserController, exportUserDataController }
+
+module.exports = { getUserController, updateUserController, deleteUserController, passwordUserController, exportUserDataController, updateUserProfilePicController }
