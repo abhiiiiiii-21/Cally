@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Eye, EyeOff, InfoIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { Input } from "@/components/ui/input";
@@ -25,6 +25,16 @@ export default function SignUpForm() {
       toastManager.add({
         title: "Missing information",
         description: "Please fill in all required fields to continue.",
+        type: "error"
+      })
+      return
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      toastManager.add({
+        title: "Invalid email",
+        description: "Please enter a valid email address.",
         type: "error"
       })
       return
@@ -56,13 +66,14 @@ export default function SignUpForm() {
         localStorage.setItem('token', data.token);
       }
 
+      router.push('/dashboard');
+
       toastManager.add({
         title: "Account created successfully!",
         description: "Welcome to Cally!",
         type: "success"
       })
 
-      router.push('/dashboard');
     } catch (error) {
       console.error("Error during sign-up:", error);
       toastManager.add({
@@ -123,7 +134,13 @@ export default function SignUpForm() {
 
           <div className="*:not-first:mt-2">
             <Label>Email ID</Label>
-            <Input required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" type="email" />
+            <div className="flex flex-col gap-1.5">
+
+              <Input required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Enter your email address" type="email" />
+              <div className="text-neutral-500 text-[12px] flex items-center gap-1">
+                <InfoIcon size={12} /> <span>Only Gmail accounts are allowed</span>
+              </div>
+            </div>
           </div>
 
           <div className="*:not-first:mt-2">

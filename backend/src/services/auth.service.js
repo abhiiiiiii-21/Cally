@@ -53,9 +53,11 @@ const login = async (data) => {
         throw new Error("Some fields are missing");
     }
 
+    const normalizedEmail = email.toLowerCase().trim();
+
     const user = await prisma.user.findUnique({
         where: {
-            email
+            email : normalizedEmail
         }
     })
 

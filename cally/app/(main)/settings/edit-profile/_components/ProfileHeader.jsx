@@ -4,53 +4,25 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Calendar, Mail } from "lucide-react";
 import { useFileUpload } from "@/hooks/use-file-upload";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toastManager } from "@/components/ui/toast";
 
-export default function ProfileHeader() {
+export default function ProfileHeader({initialData}) {
   const router = useRouter()
-  const [user, setUser] = useState({ username: "", email: "", profilePic: "" });
-  const [loading, setLoading] = useState(true);
+
+  const [user, setUser] = useState({
+    username: initialData?.username || "",
+    email: initialData?.email || "",
+    profilePic: initialData?.profilePic || ""
+  });
+
   const [uploading, setUploading] = useState(false)
 
   const [{ files }, { removeFile, openFileDialog, getInputProps }] = useFileUpload({ accept: "image/*" });
 
   const previewUrl = files[0]?.preview || null;
   const fileName = files[0]?.file.name || null;
-
-  const userData = async () => {
-    try {
-      setLoading(true)
-      const token = localStorage.getItem('token')
-
-      if (!token) {
-        router.push('/auth/log-in')
-        return;
-      }
-
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/me`, {
-        method: 'GET',
-        headers: {
-          'Content-type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }
-      })
-
-      if (!res.ok) {
-        throw new Error("Failed to fetch user");
-      }
-
-      const data = await res.json()
-
-      setUser({ username: data.username, email: data.email, profilePic: data.profilePic })
-
-    } catch (error) {
-      console.error("User fetch failed:", error)
-    } finally {
-      setLoading(false)
-    }
-  }
 
   const handleUploadProfilePic = async () => {
     if (!files[0]) {
@@ -108,10 +80,6 @@ export default function ProfileHeader() {
       setUploading(false)
     }
   }
-
-  useEffect(() => {
-    userData()
-  }, [])
 
   return (
     <Card className="bg-black text-white">

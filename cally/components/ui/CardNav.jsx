@@ -138,7 +138,18 @@ const CardNav = ({
   const router = useRouter();
 
   function onClickGetStarted() {
-    router.push("/auth/log-in");
+
+    const token = localStorage.getItem('token')
+
+    if (!token){
+      router.push("/auth/log-in");
+      return
+    }
+    else{
+      router.push('/dashboard')
+      return
+    }
+
   }
 
   return (

@@ -1,53 +1,33 @@
 "use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { toastManager } from "@/components/ui/toast";
 import Tab1 from "./Tab1";
 import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
 
-export default function ProfileTabs() {
+export default function ProfileTabs({initialData}) {
     const router = useRouter()
-    const [loading, setLoading] = useState(true)
     const [updating, setUpdating] = useState(false)
-    const [userData, setUserData] = useState({ fullname: "", username: "", email: "", about: "" });
-    const [originalData, setOriginalData] = useState(null)
 
+    const [userData, setUserData] = useState({
+        fullname: initialData?.fullname || "",
+        username: initialData?.username || "",
+        email: initialData?.email || "",
+        about: initialData?.about || "",
+        profilePic: initialData?.profilePic || "",
+        passwordUpdatedAt: initialData?.passwordUpdatedAt || ""
+    });
 
-    const fetchUserData = async () => {
-        try {
-            setLoading(true)
-            const token = localStorage.getItem('token')
-
-            if (!token) {
-                console.log("Token is missing!")
-                router.push('/auth/log-in')
-                return
-            }
-
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/user/me`, {
-                method: 'GET',
-                headers: {
-                    'Content-type': 'application/json',
-                    'Authorization': `Bearer ${token}`
-                }
-            })
-
-            if (!res.ok) {
-                throw new Error("Failed to fetch user");
-            }
-
-            const data = await res.json()
-
-            setUserData({ fullname: data.fullname, username: data.username, email: data.email, about: data.about, profilePic: data.profilePic, passwordUpdatedAt: data.passwordUpdatedAt })
-            setOriginalData({ fullname: data.fullname, username: data.username, email: data.email, about: data.about, profilePic: data.profilePic, passwordUpdatedAt: data.passwordUpdatedAt })
-        } catch (error) {
-            console.error("User fetch failed:", error)
-        } finally {
-            setLoading(false)
-        }
-    }
+    const [originalData, setOriginalData] = useState({
+        fullname: initialData?.fullname || "",
+        username: initialData?.username || "",
+        email: initialData?.email || "",
+        about: initialData?.about || "",
+        profilePic: initialData?.profilePic || "",
+        passwordUpdatedAt: initialData?.passwordUpdatedAt || ""
+    })
 
     const updateUserData = async () => {
         try {
@@ -145,10 +125,6 @@ export default function ProfileTabs() {
         }
     }
 
-    useEffect(() => {
-        fetchUserData()
-    }, [])
-
 
 
     return (
@@ -161,7 +137,7 @@ export default function ProfileTabs() {
 
             {/* First */}
             <TabsContent value="personal" className="space-y-6">
-                <Tab1 userData={userData} setUserData={setUserData} updateUserData={updateUserData} updating={updating} loading={loading} originalData={originalData} />
+                <Tab1 userData={userData} setUserData={setUserData} updateUserData={updateUserData} updating={updating} originalData={originalData} />
             </TabsContent>
 
             {/* Second */}

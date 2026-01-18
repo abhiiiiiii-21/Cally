@@ -7,7 +7,7 @@ import { InfoIcon } from 'lucide-react'
 import React from 'react'
 
 
-const Tab1 = ({ userData, setUserData, updateUserData, updating, loading, originalData }) => {
+const Tab1 = ({ userData, setUserData, updateUserData, updating, originalData }) => {
 
     function usernameValidation(e) {
         const username = e.target.value;
