@@ -78,7 +78,7 @@ const WorkedWith = () => {
                     industries and time zones.
                 </h1>
             </div>
-            <LogoCloud />
+            {/* <LogoCloud /> */}
         </section>
     )
 }

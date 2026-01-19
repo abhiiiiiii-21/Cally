@@ -38,8 +38,8 @@ const Hero = () => {
         </div>
 
         <div className='flex gap-3 mt-6'>
-          <Button className="rounded-[calc(0.75rem-0.2rem)] cursor-pointer py-2 font-urbanist font-semibold" size="lg">Book a Demo</Button>
-          <RippleButton rippleColor="#6c757d" onClick={onClickStart}>Start scheduling</RippleButton>
+          <Button className="rounded-[calc(0.75rem-0.2rem)] cursor-pointer py-2 font-urbanist font-semibold">Book a Demo</Button>
+          <Button className="rounded-[calc(0.75rem-0.2rem)] cursor-pointer py-2 font-urbanist font-semibold bg-black text-white hover:bg-neutral-800 hover:text-white" onClick={onClickStart}>Start Scheduling</Button>
         </div>
       </div>
     </div>

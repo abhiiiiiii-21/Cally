@@ -28,9 +28,9 @@ const page = () => {
         <WorkedWith />
         <HowItWorks />
         <Integrations />
-        {/* <Testimonials /> */}
+        <Testimonials />
         <FAQs />
-        {/* <CTA /> */}
+        <CTA />
 
     </main>
   )
