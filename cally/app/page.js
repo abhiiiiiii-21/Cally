@@ -10,6 +10,8 @@ import HowItWorks from './_components/HowItWorks'
 import FAQs from './_components/FAQs'
 import Lenis from '@studio-freight/lenis'
 
+import ClientLayout from '@/components/preloader/ClientLayout'
+
 const page = () => {
   React.useEffect(() => {
     const lenis = new Lenis();
@@ -22,7 +24,8 @@ const page = () => {
     requestAnimationFrame(raf);
   }, []);
   return (
-    <main className=''>
+    <ClientLayout>
+      <main className=''>
         <Navbar />
         <Hero />
         <WorkedWith />
@@ -31,8 +34,8 @@ const page = () => {
         <Testimonials />
         <FAQs />
         <CTA />
-
-    </main>
+      </main>
+    </ClientLayout>
   )
 }
 

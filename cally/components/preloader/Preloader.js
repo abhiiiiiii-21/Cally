@@ -180,7 +180,7 @@ const Preloader = ({ onComplete }) => {
                                 className="absolute bottom-40 left-20 p-8 bg-[#0D0D0D] backdrop-blur-3xl rounded-3xl shadow-[0_30px_90px_rgba(0,0,0,0.9)] cursor-grab active:cursor-grabbing border border-white/5"
                             >
                                 <div className="flex flex-col gap-1">
-                                    <p className="text-[10px] font-bold text-blue-400 uppercase tracking-[0.4em] mb-3">Booking System</p>
+                                    <p className="text-[10px] font-bold font-urbanist text-blue-400 uppercase tracking-[0.4em] mb-3">Booking System</p>
                                     <h3 className="text-4xl font-extrabold tracking-tighter text-white leading-[0.9] font-urbanist">
                                         SMART<br />
                                         <span className="text-white/40">TIME</span><br />
@@ -228,7 +228,7 @@ const Preloader = ({ onComplete }) => {
                                 <p className="text-[11px] font-bold text-white tracking-tight flex items-center gap-2 font-urbanist">
                                     MEETINGS LIVE
                                     <span className="text-white/20">|</span>
-                                    <span className="text-white/40 font-mono">2026</span>
+                                    <span className="text-white/40 font-urbanist">2026</span>
                                 </p>
                             </motion.div>
                         )}

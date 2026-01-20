@@ -4,7 +4,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 
 
 import { AnchoredToastProvider, ToastProvider } from "@/components/ui/toast";
-import ClientLayout from "@/components/preloader/ClientLayout";
 
 const raleway = Raleway({
   subsets: ['latin'],
@@ -35,13 +34,11 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <ClientLayout>
           <ToastProvider position="bottom-center">
             <AnchoredToastProvider>
               {children}
             </AnchoredToastProvider>
           </ToastProvider>
-          </ClientLayout>
         </ThemeProvider>
       </body>
     </html>

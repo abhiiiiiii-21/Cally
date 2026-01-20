@@ -8,7 +8,7 @@ const HowItWorks = () => {
         text="How it works"
         color="#22d3ee"
       />
-      <TimeLine_01/>
+      <TimeLine_01 />
     </section>
   )
 }

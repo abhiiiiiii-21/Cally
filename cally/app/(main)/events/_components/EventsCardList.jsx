@@ -41,36 +41,12 @@ import {
 import NoEventsAvailable from "./NoEventsAvailable";
 import EventsSheet from "./EventsSheet";
 
-export default function EventsCardList() {
+export default function EventsCardList({userData}) {
     const [items, setItems] = useState([]);
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState(null);
 
     const getItemValue = (item) => item.id;
-
-    const fetchEvents = async () => {
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`,{
-                method: "GET",
-                headers: {"content-type" : "application/json"}
-            });
-            const data = await res.json();
-
-            if (!res.ok) {
-                console.error(data.error || 'Failed to fetch events');
-                return;
-            }
-
-            setItems(data);
-
-        } catch (error) {
-            console.error('Error fetching events:', error);
-        }
-    }
-
-    useEffect(() => {
-        fetchEvents();
-    }, []);
 
     return (
         <div className="w-full max-w-7xl space-y-8 mt-8 items-start">

@@ -2,8 +2,6 @@
 import React from 'react'
 import DemoOne from './_Hero/DemoOne'
 import AnnouncementBadge from './_Hero/AnnouncementBadge'
-import { RippleButton } from '@/components/ui/ripple-button'
-import { TextRoll } from '@/components/ui/text-roll'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 
