@@ -30,7 +30,7 @@ const NoEventsAvailable = () => {
                 //     } }}
 
                 // />
-                <div className='w-full rounded-md p-8 border-dotted border border-neutral-700 flex flex-col items-center justify-center font-urbanist'>
+                <div className='w-full rounded-md p-8 mt-10 border-dotted border border-neutral-700 flex flex-col items-center justify-center font-urbanist'>
                     <div className='text-center'>
                         <p className='text-lg font-semibold '>Create your first event type!</p>
                         <p className='text-neutral-400 text-sm'>Event types help you offer different kinds of meetings.</p>

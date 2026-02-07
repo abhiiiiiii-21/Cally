@@ -14,52 +14,91 @@ import { useRouter } from "next/navigation"
 const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
-    const [duration, setDuration] = useState(15);
+    const [duration, setDuration] = useState("");
     const [loading, setLoading] = useState(false);
 
-    // Internal state for uncontrolled usage (if needed, but we'll mostly use controlled)
+
     const [internalOpen, setInternalOpen] = useState(false);
     const isControlled = isOpen !== undefined;
     const open = isControlled ? isOpen : internalOpen;
     const setOpen = isControlled ? onOpenChange : setInternalOpen;
 
-    const router = useRouter();
-
     useEffect(() => {
         if (initialData) {
             setTitle(initialData.title || "");
             setDescription(initialData.description || "");
-            setDuration(initialData.duration || 15);
+            setDuration(String(initialData.duration || 15));
         } else {
             setTitle("");
             setDescription("");
-            setDuration(15);
+            setDuration("15");
         }
     }, [initialData, open]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`, {
-            method : 'POST',
-            headers : {"content-type" : "application/json"},
-            body : JSON.stringify({title, description, duration})
-            })
 
-            const data = await res.json()
+        const durationNumber = Number(duration);
+        if (!duration || durationNumber <= 0) {
+            toastManager.add({
+                description: "Duration must be greater than 0",
+                type: "error",
+            });
+            return;
+        }
+
+        try {
+            setLoading(true);
+
+            const token = localStorage.getItem("token");
+
+            const res = await fetch(
+                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                    body: JSON.stringify({
+                        title,
+                        description,
+                        duration: durationNumber,
+                    }),
+                }
+            );
+
+            const data = await res.json();
 
             if (!res.ok) {
-                toastManager.error(data.error || 'Something went wrong');
+                toastManager.add({
+                    description: data.error || "Something went wrong",
+                    type: "error",
+                });
                 return;
             }
 
-            toastManager.success('Event created successfully!');
+
+            toastManager.add({
+                description: "Event created successfully!",
+                type: "success",
+            });
+            
+            onSuccess?.(data);
+
             setOpen(false);
         } catch (error) {
-            console.log(error)
+            console.error(error);
+            toastManager.add({
+                description: "Failed to create event",
+                type: "error",
+            });
+        } finally {
+            setLoading(false);
         }
     };
+
 
     return (
         <div>
@@ -98,6 +137,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
                                 placeholder="Enter events description here!"
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
+                                required
                             />
                         </div>
 
@@ -106,13 +146,13 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
                             <div className="relative">
                                 <Input
                                     className="peer ps-9 pe-16"
-                                    htmlFor="sheet-minutes"
-                                    placeholder="15"
                                     type="number"
+                                    min={1}
                                     value={duration}
-                                    onChange={(e) => setDuration(Number(e.target.value))}
+                                    onChange={(e) => setDuration(e.target.value)}
                                     required
                                 />
+
                                 <span className="pointer-events-none absolute inset-y-0 start-0 flex items-center justify-center ps-3 text-muted-foreground text-sm peer-disabled:opacity-50">
                                     <ClockIcon className="h-4 w-4" />
                                 </span>

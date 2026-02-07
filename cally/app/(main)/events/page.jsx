@@ -9,24 +9,23 @@ import { MorphingSquare } from '@/components/ui/morphing-square';
 
 
 const page = () => {
-  const [loading, setLoading] = useState(false)
-  const [userData, setUserData] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [events, setEvents] = useState([]);
   const router = useRouter()
 
   useEffect(() => {
     async function fetchData() {
-      setLoading(true)
       try {
         const token = localStorage.getItem('token')
 
         if (!token) {
           router.push('/auth/log-in')
+          return
         }
 
         const res = await fetch((`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`), {
           method: 'GET',
           headers: {
-            'content-type': 'application/json',
             'Authorization': `Bearer ${token}`
           }
         })
@@ -38,7 +37,7 @@ const page = () => {
 
         const data = await res.json()
 
-        setUserData(data)
+        setEvents(data)
 
 
       } catch (error) {
@@ -46,16 +45,15 @@ const page = () => {
       } finally {
         setLoading(false)
       }
-
     }
 
     fetchData()
-  }, [])
+  }, [router])
 
   if (loading) {
     return (
       <section className='flex items-center justify-center' style={{ height: 'calc(100vh - 64px)' }}>
-        <MorphingSquare message='Loading profile...' />
+        <MorphingSquare message='Loading events...' />
       </section>
     )
   }
@@ -83,7 +81,7 @@ const page = () => {
         </div>
       </div>
 
-      <EventsCardList className="items-start" eventsData={userData} />
+      <EventsCardList className="items-start" events={events} />
     </div>
   )
 }
