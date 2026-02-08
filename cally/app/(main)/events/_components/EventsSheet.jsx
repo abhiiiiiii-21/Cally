@@ -8,8 +8,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { toastManager } from "@/components/ui/toast"
 import { ClockIcon, PlusCircleIcon } from "lucide-react"
 import { useState, useEffect } from "react"
-import { useRouter } from "next/navigation"
-
 
 const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) => {
     const [title, setTitle] = useState("");
@@ -85,6 +83,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
                 type: "success",
             });
             
+            console.log("EVENT SHEET → onSuccess called with:", data);
             onSuccess?.(data);
 
             setOpen(false);

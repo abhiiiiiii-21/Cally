@@ -58,6 +58,11 @@ const page = () => {
     )
   }
 
+  const handleEventCreated = (newEvent) => {
+    console.log("EVENT RECEIVED IN PAGE:", newEvent);
+    setEvents((prev) => [newEvent, ...prev]);
+  };
+
   return (
     <div className='p-4 font-urbanist pl-11 pr-11'>
       <div className="max-w-56">
@@ -81,7 +86,7 @@ const page = () => {
         </div>
       </div>
 
-      <EventsCardList className="items-start" events={events} />
+      <EventsCardList className="items-start" events={events} onEventCreated={handleEventCreated} />
     </div>
   )
 }
