@@ -45,6 +45,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
             });
             return;
         }
+        const isEditing = !!initialData;
 
         try {
             setLoading(true);
@@ -52,9 +53,9 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
             const token = localStorage.getItem("token");
 
             const res = await fetch(
-                `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events`,
+                 `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events${isEditing ? `/${initialData.id}` : ''}`,
                 {
-                    method: "POST",
+                    method: isEditing ? "PUT" : "POST",
                     headers: {
                         "Content-Type": "application/json",
                         Authorization: `Bearer ${token}`,
@@ -79,18 +80,17 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
 
 
             toastManager.add({
-                description: "Event created successfully!",
+                description: isEditing ? "Event updated successfully!" : "Event created successfully!",
                 type: "success",
             });
-            
-            console.log("EVENT SHEET → onSuccess called with:", data);
+
             onSuccess?.(data);
 
             setOpen(false);
         } catch (error) {
             console.error(error);
             toastManager.add({
-                description: "Failed to create event",
+                description: isEditing ? "Failed to update event" : "Failed to create event",
                 type: "error",
             });
         } finally {
@@ -102,14 +102,7 @@ const EventsSheet = ({ isOpen, onOpenChange, initialData = null, onSuccess }) =>
     return (
         <div>
             <Sheet open={open} onOpenChange={setOpen}>
-                {!isControlled && (
-                    <SheetTrigger asChild>
-                        <Button size="sm" className="px-2 py-1 flex items-center gap-1 cursor-pointer mr-4">
-                            <PlusCircleIcon fill="black" stroke="white" />
-                            <span className="font-urbanist">Create Event</span>
-                        </Button>
-                    </SheetTrigger>
-                )}
+
 
                 <SheetContent className="font-urbanist flex flex-col">
                     <SheetHeader>

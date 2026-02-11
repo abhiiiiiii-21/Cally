@@ -20,8 +20,9 @@ const createEventController = async (req, res) => {
 const getAllEventController = async (req, res) => {
     try {
         const userId = req.user.userId;
+        const search = req.query.search;
 
-        const events = await getAllEvents(userId);
+        const events = await getAllEvents(userId, search);
         return res.status(200).json(events);
     } catch (error) {
         return res.status(400).json({ message: error.message });

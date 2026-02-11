@@ -24,9 +24,15 @@ const createEvent = async (data, userId) => {
     return event;
 }
 
-const getAllEvents = async (userId) => {
+const getAllEvents = async (userId, search) => {
     const events = await prisma.event.findMany({
-        where: { userId },
+        where: {
+            userId, ...(search && {
+                OR: [
+                    { title: { contains: search, mode: "insensitive" } },
+                ],
+            })
+        },
         orderBy: {
             createdAt: "desc"
         }
@@ -50,7 +56,7 @@ const updateEvent = async (id, data, userId) => {
     }
 
 
-    const result = await prisma.event.updateMany({
+    const result = await prisma.event.update({
         where: {
             id,
             userId,
@@ -62,10 +68,6 @@ const updateEvent = async (id, data, userId) => {
             ...(showOnProfile !== undefined && { showOnProfile }),
         },
     });
-
-    if (result.count === 0) {
-        throw new Error("Event not found or unauthorized");
-    }
 
     return result;
 }

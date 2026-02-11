@@ -15,6 +15,7 @@ import {
     LinkIcon,
     MoreHorizontalIcon,
     PencilIcon,
+    PlusCircleIcon,
     Trash2Icon,
 } from "lucide-react";
 
@@ -39,10 +40,14 @@ import {
 
 import NoEventsAvailable from "./NoEventsAvailable";
 import EventsSheet from "./EventsSheet";
+import { toastManager } from "@/components/ui/toast";
+import { useRouter } from "next/navigation";
 
-export default function EventsCardList({ events, onEventCreated }) {
+export default function EventsCardList({ events, onEventCreated, onEventDeleted, onEventUpdated }) {
     const [isSheetOpen, setIsSheetOpen] = useState(false);
     const [editingEvent, setEditingEvent] = useState(null);
+    const [isCreating, setIsCreating] = useState(false);
+    const router = useRouter();
 
     const handleEdit = (event) => {
         setEditingEvent(event);
@@ -50,6 +55,90 @@ export default function EventsCardList({ events, onEventCreated }) {
     };
 
     const getItemValue = (item) => item.id;
+
+    const handleDelete = async (eventId) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            router.push('/auth/log-in')
+            return;
+        }
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+
+        if (res.ok) {
+            onEventDeleted(eventId);
+
+            toastManager.add({
+                description: "Event deleted successfully!",
+                type: "success",
+            });
+
+        }
+    };
+
+    const handleDuplicate = async (eventId) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            router.push('/auth/log-in')
+            return;
+        }
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}/duplicate`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            onEventCreated(data);
+            toastManager.add({
+                description: "Event duplicated successfully!",
+                type: "success",
+            });
+        }
+    }
+
+    const handleToggleProfile = async (eventId, currentValue) => {
+        const token = localStorage.getItem("token");
+
+        if (!token) {
+            router.push('/auth/log-in')
+            return;
+        }
+
+        const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE_URL}/api/events/${eventId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({
+                showOnProfile: !currentValue,
+            }),
+        });
+
+        if (res.ok) {
+            const data = await res.json();
+            onEventUpdated(data);
+            toastManager.add({
+                description: !currentValue ? "Event is now visible on your profile" : "Event is now hidden from your profile",
+                type: "success",
+            });
+        }
+    }
+
 
     return (
         <div className="w-full max-w-8xl space-y-8 mt-8 items-start">
@@ -84,7 +173,9 @@ export default function EventsCardList({ events, onEventCreated }) {
                                     <TooltipProvider delayDuration={0}>
                                         <Tooltip>
                                             <TooltipTrigger asChild>
-                                                <Switch checked={item.showOnProfile} />
+                                                <span className="inline-flex">
+                                                    <Switch checked={item.showOnProfile} onCheckedChange={() => handleToggleProfile(item.id, item.showOnProfile)} />
+                                                </span>
                                             </TooltipTrigger>
                                             <TooltipContent className="bg-white text-black px-2 py-1 text-xs">
                                                 {item.showOnProfile
@@ -93,7 +184,6 @@ export default function EventsCardList({ events, onEventCreated }) {
                                             </TooltipContent>
                                         </Tooltip>
                                     </TooltipProvider>
-
                                     <ButtonGroup>
                                         <TooltipProvider delayDuration={0}>
                                             <Tooltip>
@@ -153,7 +243,9 @@ export default function EventsCardList({ events, onEventCreated }) {
                                                         <PencilIcon />
                                                         Edit
                                                     </DropdownMenuItem>
-                                                    <DropdownMenuItem className="cursor-pointer">
+                                                    <DropdownMenuItem
+                                                        className="cursor-pointer"
+                                                        onClick={() => handleDuplicate(item.id)}>
                                                         <CopyIcon />
                                                         Duplicate
                                                     </DropdownMenuItem>
@@ -165,7 +257,7 @@ export default function EventsCardList({ events, onEventCreated }) {
                                                     <DropdownMenuItem
                                                         className="cursor-pointer"
                                                         variant="destructive"
-                                                    >
+                                                        onClick={() => handleDelete(item.id)}>
                                                         <Trash2Icon />
                                                         Delete
                                                     </DropdownMenuItem>
@@ -181,9 +273,15 @@ export default function EventsCardList({ events, onEventCreated }) {
             )}
             <EventsSheet
                 isOpen={isSheetOpen}
-                onOpenChange={setIsSheetOpen}
-                initialData={editingEvent}
-                onSuccess={onEventCreated}/>
+                onOpenChange={(open) => {
+                    setIsSheetOpen(open);
+                    if (!open) {
+                        setIsCreating(false);
+                        setEditingEvent(null);
+                    }
+                }}
+                initialData={isCreating ? null : editingEvent}
+                onSuccess={isCreating ? onEventCreated : onEventUpdated} />
         </div>
     );
 }
